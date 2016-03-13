@@ -133,19 +133,6 @@ public class CodeGUI{
 		jTypePanel.setBounds(198, 385, 181, 72);
 		jPanel.add(jTypePanel);
 		
-		DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0);
-		
-    	String binary;
-    	String hex;
-        for(int i = 0; i < ins.size(); i++){
-        	binary = "";
-        	hex = "";
-        	binary = Integer.toBinaryString(ins.get(i).getPC());
-            hex = Integer.toHexString(Integer.parseInt(binary, 2));
-            model.addRow(new Object[]{hex, ins.get(i).getBinHexStringIns()});
-        }
-        jTable.setModel(model); 
-		
 		rTypePanel.setVisible(false);
         iType1Panel.setVisible(false);
         iType2Panel.setVisible(false);
@@ -376,6 +363,7 @@ public class CodeGUI{
 		            	String hex = "";
 		            	
 		            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0);
+		            	model.addRow(new Object[]{"PC", "Instruction"});
 		                for(int i = 0; i < ins.size(); i++){
 		                	binary = "";
 		                	hex = "";
@@ -414,7 +402,9 @@ public class CodeGUI{
             	String binary = "";
             	String hex = "";
             	
+            	//make changes here
             	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction", "Opcode(Hex)"}, 0);
+            	model.addRow(new Object[]{"PC", "Instruction", "Opcode(Hex)"});
                 for(i = 0; i < ins.size(); i++){
                 	binary = "";
                 	hex = "";

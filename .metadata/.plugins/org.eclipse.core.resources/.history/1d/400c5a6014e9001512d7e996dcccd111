@@ -60,6 +60,7 @@ public class RegisterGUI {
     		   }
     	};
     	
+    	model.addRow(new Object[]{"Register", "Value"});
         for(int i = 0; i < reg.size(); i++){
         	model.addRow(new Object[]{reg.get(i).getReg(), reg.get(i).getRegValue()});
         }
@@ -121,7 +122,7 @@ public class RegisterGUI {
             		new JOptionPane().showMessageDialog(null, "Please limit input to 4 values!");
             	}else{
 	            	String regValue = newRValue1.getText() + " " + newRValue2.getText() + " " + newRValue3.getText() + " " + newRValue4.getText();
-	            	reg.get(row).setRegValue(regValue);
+	            	reg.get(row-1).setRegValue(regValue);
 	            	jFrame.dispose();
 	            	new RegisterGUI(ins, reg);
 	            	new JOptionPane().showMessageDialog(null, "Changes were successfully made!");
