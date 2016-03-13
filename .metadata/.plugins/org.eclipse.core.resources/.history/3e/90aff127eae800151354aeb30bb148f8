@@ -1,0 +1,22 @@
+package gui;
+
+import java.awt.Dimension;
+import java.util.ArrayList;
+import javax.swing.*;
+import comparc.Instruction;
+
+public class MemoryGUI {
+	private JFrame jFrame = new JFrame();
+	
+	public MemoryGUI(ArrayList<Instruction> ins){
+	    //construct components
+
+	    //adjust size and set layout
+	    jFrame.setPreferredSize (new Dimension (784, 454));
+	    jFrame.setLayout (null);
+
+	    //add components
+
+	    //set component bounds (only needed by Absolute Positioning)
+	}
+}

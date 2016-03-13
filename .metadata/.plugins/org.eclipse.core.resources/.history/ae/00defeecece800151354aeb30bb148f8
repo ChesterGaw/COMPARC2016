@@ -1,0 +1,11 @@
+package comparc;
+
+public class Register {
+	private String reg;
+	private String regValue;
+	
+	public Register(String reg, String regValue){
+		this.reg = reg;
+		this.regValue = regValue;
+	}
+}

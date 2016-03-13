@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import comparc.Instruction;
+import comparc.Register;
 
 public class CodeGUI{
 	private JFrame jFrame = new JFrame("Code"); 
@@ -43,7 +44,7 @@ public class CodeGUI{
     private JButton btnGenerateOpcodehex = new JButton("Generate OpCode(Hex)");
     private JButton btnBack = new JButton("Back");
 
-    public CodeGUI(ArrayList<Instruction> ins) {    	
+    public CodeGUI(ArrayList<Instruction> ins, ArrayList<Register> reg) {    	
         JScrollPane scrollPane = new JScrollPane();
     	
         jPanel.setPreferredSize (new Dimension(515, 554));
@@ -283,7 +284,6 @@ public class CodeGUI{
         btnAdd.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-            	boolean isNumeric = true;
             	boolean lablExist = false;
             	int j = 0;
             	
@@ -316,18 +316,7 @@ public class CodeGUI{
 		     	            			   break;
 		            					   
 		            		case "SD":
-		            		case "LD": 
-		//            					try {
-		//			            		     Integer.parseInt(txtOffset.getText());
-		//			            		}
-		//			            		catch (final NumberFormatException e1) {
-		//			            		     isNumeric = false;
-		//			            		}
-		//            			
-		//            				   if(isNumeric == false){
-		//            					   new JOptionPane().showMessageDialog(null, "Please enter hex values!");
-		//            				   }else 
-		            				   if(txtOffset.getText().length() != 4){
+		            		case "LD": if(txtOffset.getText().length() != 4){
 		            					   new JOptionPane().showMessageDialog(null, "Please limit input to 4 hex digits!");
 		            				   }else{
 			            				   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, 0, Integer.parseInt(cmbRt.getSelectedItem().toString()), Integer.parseInt(cmbBase.getSelectedItem().toString()), txtOffset.getText()));
@@ -338,8 +327,7 @@ public class CodeGUI{
 			            				   txtOffset.setText("");
 			            				   iType1Panel.setVisible(false);
 		            				   }break;
-		            		case "DADDUI": 
-		            					   if(txtImm.getText().length() != 4){
+		            		case "DADDUI": if(txtImm.getText().length() != 4){
 					    					   new JOptionPane().showMessageDialog(null, "Please limit input to 4 hex digits!");
 					    				   }else{
 			            					   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, Integer.parseInt(cmbRs.getSelectedItem().toString()), Integer.parseInt(cmbRt.getSelectedItem().toString()), 0, txtImm.getText()));
@@ -436,7 +424,7 @@ public class CodeGUI{
     				System.out.println(ins.get(i).getBinHexStringIns().get(2));
     			}
             	jFrame.dispose();
-            	new MainGUI(ins);
+            	new MainGUI(ins, reg);
             }
         });
         

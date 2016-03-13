@@ -1,0 +1,27 @@
+package comparc;
+
+public class Register {
+	private String reg;
+	private String regValue;
+	
+	public Register(String reg, String regValue){
+		this.reg = reg;
+		this.regValue = regValue;
+	}
+
+	public String getReg() {
+		return reg;
+	}
+
+	public void setReg(String reg) {
+		this.reg = reg;
+	}
+
+	public String getRegValue() {
+		return regValue;
+	}
+
+	public void setRegValue(String regValue) {
+		this.regValue = regValue;
+	}
+}

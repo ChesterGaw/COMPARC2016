@@ -3,8 +3,11 @@ package gui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.*;
 import comparc.Instruction;
+import comparc.Register;
+
 import java.util.ArrayList;
 
 public class MainGUI{
@@ -15,8 +18,19 @@ public class MainGUI{
     private JButton btnRun = new JButton ("Run");
     private JButton btnExit = new JButton ("Exit");
 
-    public MainGUI(ArrayList<Instruction> ins) {
+    public MainGUI(ArrayList<Instruction> ins, ArrayList<Register> reg) {
         //adjust size and set layout
+//    	try {
+//    	    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+//    	        if ("Nimbus".equals(info.getName())) {
+//    	            UIManager.setLookAndFeel(info.getClassName());
+//    	            break;
+//    	        }
+//    	    }
+//    	} catch (Exception e) {
+//    	    // If Nimbus is not available, you can set the GUI to another look and feel.
+//    	}
+    	
         jPanel.setPreferredSize (new Dimension (272, 247));
         jPanel.setLayout (null);
 
@@ -45,7 +59,7 @@ public class MainGUI{
             @Override
             public void actionPerformed(ActionEvent e){
             	frame.dispose();
-            	new CodeGUI(ins);
+            	new CodeGUI(ins, reg);
             }
         });
         
@@ -53,6 +67,7 @@ public class MainGUI{
             @Override
             public void actionPerformed(ActionEvent e){
             	frame.dispose();
+            	new RegisterGUI(ins, reg);
             }
         });
         

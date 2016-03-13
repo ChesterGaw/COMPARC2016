@@ -1,0 +1,22 @@
+package gui;
+
+import java.awt.Dimension;
+import java.util.ArrayList;
+import javax.swing.*;
+import comparc.Instruction;
+
+public class MemoryGUI {
+	private JFrame jFrame = new JFrame();
+	private JPanel jPanel = new JPanel();
+	
+	public MemoryGUI(ArrayList<Instruction> ins){
+        jPanel.setPreferredSize (new Dimension(515, 554));
+        jPanel.setLayout (null);
+
+	    jFrame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+	    jFrame.getContentPane().add(jPanel);
+	    jFrame.pack();
+	    jFrame.setVisible (true);
+	    jFrame.setLocationRelativeTo(null);
+	}
+}
