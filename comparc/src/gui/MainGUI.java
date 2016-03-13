@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.*;
 import comparc.Instruction;
+import comparc.Memory;
 import comparc.Register;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class MainGUI{
     private JButton btnRun = new JButton ("Run");
     private JButton btnExit = new JButton ("Exit");
 
-    public MainGUI(ArrayList<Instruction> ins, ArrayList<Register> reg) {
+    public MainGUI(ArrayList<Instruction> ins, ArrayList<Register> reg, ArrayList<Memory> mem) {
         //adjust size and set layout
 //    	try {
 //    	    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -59,7 +60,7 @@ public class MainGUI{
             @Override
             public void actionPerformed(ActionEvent e){
             	frame.dispose();
-            	new CodeGUI(ins, reg);
+            	new CodeGUI(ins, reg, mem);
             }
         });
         
@@ -67,7 +68,7 @@ public class MainGUI{
             @Override
             public void actionPerformed(ActionEvent e){
             	frame.dispose();
-            	new RegisterGUI(ins, reg);
+            	new RegisterGUI(ins, reg, mem);
             }
         });
         
@@ -75,6 +76,7 @@ public class MainGUI{
             @Override
             public void actionPerformed(ActionEvent e){
             	frame.dispose();
+            	new MemoryGUI(ins, reg, mem);
             }
         });
         

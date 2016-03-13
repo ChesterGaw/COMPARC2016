@@ -1,0 +1,135 @@
+package gui;
+
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+import comparc.Instruction;
+import comparc.Memory;
+import comparc.Register;
+
+import java.awt.BorderLayout;
+
+public class MemoryGUI {
+	private JFrame jFrame = new JFrame();
+	private JPanel mainPanel = new JPanel();
+	private JPanel editPanel = new JPanel();
+	private JPanel gotoPanel = new JPanel();
+	private JTable jTable;
+	private JLabel lblNewMemoryValue = new JLabel("New memory value for memory for ");
+	private JLabel lblGotoMemory = new JLabel("Go to memory: ");
+	private JTextField txtNewMemoryValue = new JTextField();
+	private JTextField txtMemoryLoc = new JTextField();
+	private JButton btnGo = new JButton("GO");
+    private JButton btnEdit = new JButton("Edit");
+    private JButton btnBack = new JButton("Back");
+    private int row = 0;
+	
+	public MemoryGUI(ArrayList<Instruction> ins, ArrayList<Register> reg, ArrayList<Memory> mem){
+        mainPanel.setPreferredSize (new Dimension(300, 600));
+        mainPanel.setLayout (null);
+
+	    jFrame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+	    jFrame.getContentPane().add(mainPanel, BorderLayout.EAST);
+	    
+	    JScrollPane scrollPane = new JScrollPane();
+	    scrollPane.setBounds(10, 11, 280, 475);
+	    mainPanel.add(scrollPane);
+	    
+	    jTable = new JTable();
+	    scrollPane.setViewportView(jTable);
+	    jFrame.pack();
+	    jFrame.setVisible (true);
+	    jFrame.setLocationRelativeTo(null);
+	    
+    	DefaultTableModel model = new DefaultTableModel(new Object[]{"Memory Location", "Data"}, 0) {
+    		   @Override
+    		   public boolean isCellEditable(int row, int column) {
+    		       return false;
+    		   }
+    	};
+    	
+        for(int i = 0; i < mem.size(); i++){
+        	model.addRow(new Object[]{mem.get(i).getAddress(), mem.get(i).getData()});
+        }
+        jTable.setModel(model); 
+	    
+	    
+	    
+	    //gotoPanel
+	    gotoPanel.setBounds(10, 489, 280, 70);
+	    mainPanel.add(gotoPanel);
+	    gotoPanel.setLayout(null);
+	    
+	    lblGotoMemory.setBounds(10, 11, 130, 14);
+	    gotoPanel.add(lblGotoMemory);
+	    
+	    txtMemoryLoc.setBounds(187, 11, 83, 14);
+	    gotoPanel.add(txtMemoryLoc);
+	    
+	    btnGo.setBounds(94, 36, 89, 23);
+	    gotoPanel.add(btnGo);
+	    
+	    gotoPanel.setVisible(true);
+	    //end of gotoPanel
+	    
+	    
+	    //editPanel
+	    editPanel.setBounds(10, 489, 280, 70);
+	    mainPanel.add(editPanel);
+	    editPanel.setLayout(null);
+	    
+	    lblNewMemoryValue.setBounds(10, 11, 260, 14);
+	    editPanel.add(lblNewMemoryValue);
+	    
+	    txtNewMemoryValue.setBounds(10, 36, 55, 20);
+	    editPanel.add(txtNewMemoryValue);
+	    txtNewMemoryValue.setColumns(10);
+	    
+	    btnEdit.setBounds(181, 36, 89, 23);
+	    editPanel.add(btnEdit);
+	    
+	    editPanel.setVisible(false);
+	    //end of editPanel
+	    
+	    btnBack.setBounds(104, 570, 89, 23);
+	    mainPanel.add(btnBack);
+	    
+	    jFrame.pack();
+	    jFrame.setVisible (true);
+	    jFrame.setLocationRelativeTo(null);
+	    
+	    //ActionListeners
+	    jTable.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent m) {
+            	if (m.getClickCount() == 2) {
+            		gotoPanel.setVisible(false);
+            		editPanel.setVisible(true);
+            	}
+            }
+        });
+	    
+	    btnGo.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+            }
+        });
+	    btnEdit.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+            }
+        });
+	    btnBack.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+            	jFrame.dispose();
+            	new MainGUI(ins, reg, mem);
+            }
+        });
+	}
+}

@@ -18,14 +18,6 @@ public class Instruction {
 	private String binImm;
 	private	ArrayList<String> binHexStringIns;
 	
-//	public Instruction(int PC, String Opcode, String A, String B, String Imm){
-//		this.PC = PC;
-//		this.binOpcode = Opcode;
-//		this.binA = A;
-//		this.binB = B;
-//		this.binImm = Imm;
-//	}
-	
 	public Instruction(int PC, String Label, String Ins, int Rd, int Rs, int Rt, int base, String a){
 		this.PC = PC;
 		this.Label = Label;
@@ -43,8 +35,6 @@ public class Instruction {
 							this.Imm = "";
 							this.Offset = "";
 							this.Base = "";
-//							this.binHexStringIns.add(toString());
-//							this.binHexStringIns.add(toHex());
 							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rd + ", " + this.Rs + ", " + this.Rt);
 							break;
 							
@@ -58,8 +48,6 @@ public class Instruction {
 							this.Imm = "";
 							this.Offset = "";
 							this.Base = "";
-//							this.binHexStringIns.add(toString());
-//							this.binHexStringIns.add(toHex());
 							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rd + ", " + this.Rs + ", " + this.Rt);
 							break;
 							
@@ -73,8 +61,6 @@ public class Instruction {
 							this.Imm = "";
 							this.Offset = "";
 							this.Base = "";
-//							this.binHexStringIns.add(toString());
-//							this.binHexStringIns.add(toHex());
 							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rd + ", " + this.Rs + ", " + this.Rt);
 							break;
 							
@@ -88,8 +74,6 @@ public class Instruction {
 							this.Imm = "";
 							this.Offset = "";
 							this.Base = "";
-//							this.binHexStringIns.add(toString());
-//							this.binHexStringIns.add(toHex());
 							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rd + ", " + this.Rs + ", " + this.Rt);
 							break;
 							
@@ -103,8 +87,6 @@ public class Instruction {
 							this.Imm = "";
 							this.Offset = "";
 							this.Base = "";
-//							this.binHexStringIns.add(toString());
-//							this.binHexStringIns.add(toHex());
 							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rd + ", " + this.Rs + ", " + this.Rt);
 							break;
 							
@@ -118,8 +100,6 @@ public class Instruction {
 							this.Imm = "";
 							this.Offset = a;
 							this.Base = "";
-//							this.binHexStringIns.add(toString());
-//							this.binHexStringIns.add(toHex());
 							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rs + ", " + this.Rt + ", " + this.Offset);
 							break;
 							
@@ -133,8 +113,6 @@ public class Instruction {
 							this.Imm = "";
 							this.Offset = a;
 							this.Base = "R" + Integer.toString(base);
-//							this.binHexStringIns.add(toString());
-//							this.binHexStringIns.add(toHex());
 							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rt + ", " + this.Offset + "(" + this.Rt + ")");
 							break;
 							
@@ -148,8 +126,6 @@ public class Instruction {
 							this.Imm = "";
 							this.Offset = a;
 							this.Base = "R" + Integer.toString(base);
-//							this.binHexStringIns.add(toString());
-//							this.binHexStringIns.add(toHex());
 							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rt + ", " + this.Offset + "(" + this.Rt + ")");
 							break;
 							
@@ -163,8 +139,6 @@ public class Instruction {
 							this.Imm = a;
 							this.Offset = "";
 							this.Base = "";
-//							this.binHexStringIns.add(toString());
-//							this.binHexStringIns.add(toHex());
 							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rt + ", " + this.Rs + ", #" + this.Imm);
 							
 							break;
@@ -179,8 +153,6 @@ public class Instruction {
 							this.Imm = "";
 							this.Offset = a;
 							this.Base = "";
-//							this.binHexStringIns.add(toString());
-//							this.binHexStringIns.add(toHex());
 							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Offset);
 							break;
 		}

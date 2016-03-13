@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import comparc.Instruction;
+import comparc.Memory;
 import comparc.Register;
 
 public class CodeGUI{
@@ -44,7 +45,7 @@ public class CodeGUI{
     private JButton btnGenerateOpcodehex = new JButton("Generate OpCode(Hex)");
     private JButton btnBack = new JButton("Back");
 
-    public CodeGUI(ArrayList<Instruction> ins, ArrayList<Register> reg) {    	
+    public CodeGUI(ArrayList<Instruction> ins, ArrayList<Register> reg, ArrayList<Memory> mem) {    	
         JScrollPane scrollPane = new JScrollPane();
     	
         jPanel.setPreferredSize (new Dimension(515, 554));
@@ -134,7 +135,6 @@ public class CodeGUI{
 		jPanel.add(jTypePanel);
 		
 		DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0);
-		
     	String binary;
     	String hex;
         for(int i = 0; i < ins.size(); i++){
@@ -142,7 +142,7 @@ public class CodeGUI{
         	hex = "";
         	binary = Integer.toBinaryString(ins.get(i).getPC());
             hex = Integer.toHexString(Integer.parseInt(binary, 2));
-            model.addRow(new Object[]{hex, ins.get(i).getBinHexStringIns()});
+            model.addRow(new Object[]{hex.toUpperCase(), ins.get(i).getBinHexStringIns()});
         }
         jTable.setModel(model); 
 		
@@ -381,7 +381,7 @@ public class CodeGUI{
 		                	hex = "";
 		                	binary = Integer.toBinaryString(ins.get(i).getPC());
 		                    hex = Integer.toHexString(Integer.parseInt(binary, 2));
-		                    model.addRow(new Object[]{hex, ins.get(i).getBinHexStringIns()});
+		                    model.addRow(new Object[]{hex.toUpperCase(), ins.get(i).getBinHexStringIns()});
 		                }
 		                jTable.setModel(model); 
             		}	
@@ -420,7 +420,7 @@ public class CodeGUI{
                 	hex = "";
                 	binary = Integer.toBinaryString(ins.get(i).getPC());
                     hex = Integer.toHexString(Integer.parseInt(binary, 2));
-                    model.addRow(new Object[]{hex, ins.get(i).getBinHexStringIns(), ins.get(i).toHex()});
+                    model.addRow(new Object[]{hex.toUpperCase(), ins.get(i).getBinHexStringIns(), ins.get(i).toHex()});
                 }
                 jTable.setModel(model);            
             }
@@ -430,7 +430,7 @@ public class CodeGUI{
             @Override
             public void actionPerformed(ActionEvent e){
             	jFrame.dispose();
-            	new MainGUI(ins, reg);
+            	new MainGUI(ins, reg, mem);
             }
         });
         

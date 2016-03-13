@@ -1,0 +1,78 @@
+package gui;
+
+import java.awt.Dimension;
+import java.util.ArrayList;
+import javax.swing.*;
+import comparc.Instruction;
+import comparc.Memory;
+import comparc.Register;
+
+import java.awt.BorderLayout;
+
+public class MemoryGUI {
+	private JFrame jFrame = new JFrame();
+	private JPanel mainPanel = new JPanel();
+	private JPanel editPanel = new JPanel();
+	private JPanel gotoPanel = new JPanel();
+	private JTable table;
+	private JLabel lblNewMemoryValue = new JLabel("New memory value for memory for ");
+	private JLabel lblGotoMemory = new JLabel("Go to memory: ");
+	private JTextField txtNewMemoryValue = new JTextField();
+	private JTextField txtMemoryLoc = new JTextField();
+	private JButton btnGo = new JButton("GO");
+    private JButton btnEdit = new JButton("Edit");
+    private JButton btnBack = new JButton("Back");
+	
+	public MemoryGUI(ArrayList<Instruction> ins, ArrayList<Register> reg, ArrayList<Memory> mem){
+        mainPanel.setPreferredSize (new Dimension(264, 600));
+        mainPanel.setLayout (null);
+
+	    jFrame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+	    jFrame.getContentPane().add(mainPanel, BorderLayout.EAST);
+	    
+	    JScrollPane scrollPane = new JScrollPane();
+	    scrollPane.setBounds(10, 11, 244, 467);
+	    mainPanel.add(scrollPane);
+	    
+	    table = new JTable();
+	    scrollPane.setViewportView(table);
+	    
+	    //gotoPanel
+	    gotoPanel.setBounds(10, 489, 244, 70);
+	    mainPanel.add(gotoPanel);
+	    gotoPanel.setLayout(null);
+	    
+	    lblGotoMemory.setBounds(10, 11, 224, 14);
+	    gotoPanel.add(lblGotoMemory);
+	    
+	    txtMemoryLoc.setBounds(10, 11, 224, 14);
+	    gotoPanel.add(txtMemoryLoc);
+	    
+	    
+	    //end of gotoPanel
+	    
+	    
+	    //editPanel
+	    editPanel.setBounds(10, 489, 244, 70);
+	    mainPanel.add(editPanel);
+	    editPanel.setLayout(null);
+	    
+	    lblNewMemoryValue.setBounds(10, 11, 224, 14);
+	    editPanel.add(lblNewMemoryValue);
+	    
+	    txtNewMemoryValue.setBounds(10, 36, 55, 20);
+	    editPanel.add(txtNewMemoryValue);
+	    txtNewMemoryValue.setColumns(10);
+	    
+	    btnEdit.setBounds(145, 36, 89, 23);
+	    editPanel.add(btnEdit);
+	    //end of editPanel
+	    
+	    btnBack.setBounds(84, 570, 89, 23);
+	    mainPanel.add(btnBack);
+	    
+	    jFrame.pack();
+	    jFrame.setVisible (true);
+	    jFrame.setLocationRelativeTo(null);
+	}
+}

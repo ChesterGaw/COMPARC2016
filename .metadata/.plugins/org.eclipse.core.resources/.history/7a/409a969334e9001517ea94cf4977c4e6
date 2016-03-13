@@ -1,0 +1,11 @@
+package comparc;
+
+public class Memory {
+	private String address;
+	private String data;
+	
+	public Memory(String address, String data){
+		this.address = address;
+		data = "00"
+	}
+}
