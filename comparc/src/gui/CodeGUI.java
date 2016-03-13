@@ -98,7 +98,7 @@ public class CodeGUI{
         btnAdd.setBounds(399, 425, 89, 23);
         jPanel.add(btnAdd);
         
-        btnGenerateOpcodehex.setBounds(335, 484, 153, 25);
+        btnGenerateOpcodehex.setBounds(307, 484, 181, 25);
         jPanel.add(btnGenerateOpcodehex);
         
         btnBack.setBounds(25, 485, 89, 23);

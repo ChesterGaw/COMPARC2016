@@ -5,11 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.*
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import comparc.Instruction;
+import comparc.Memory;
+import comparc.Register;
 
 public class CodeGUI{
 	private JFrame jFrame = new JFrame("Code"); 
@@ -42,8 +45,8 @@ public class CodeGUI{
     private JButton btnGenerateOpcodehex = new JButton("Generate OpCode(Hex)");
     private JButton btnBack = new JButton("Back");
 
-    public CodeGUI(ArrayList<Instruction> ins) {    	
-        //adjust size and set layout
+    public CodeGUI(ArrayList<Instruction> ins, ArrayList<Register> reg, ArrayList<Memory> mem) {    	
+        JScrollPane scrollPane = new JScrollPane();
     	
         jPanel.setPreferredSize (new Dimension(515, 554));
         jPanel.setLayout (null);
@@ -59,9 +62,13 @@ public class CodeGUI{
         
         lblOpHex.setBounds (335, 5, 100, 25);
         jPanel.add(lblOpHex);
-
-        jTable.setBounds(25, 41, 463, 345);
-        jPanel.add(jTable);
+        
+        scrollPane.setViewportView(jTable);
+        scrollPane.setBounds(25, 41, 463, 345);
+        scrollPane.setVisible(true);
+        jTable.setVisible(true);
+        jPanel.add(scrollPane);
+        
         
         lblLabel.setBounds(35, 401, 46, 14);
         jPanel.add(lblLabel);
@@ -126,6 +133,18 @@ public class CodeGUI{
         jTypePanel.setLayout(null);
 		jTypePanel.setBounds(198, 385, 181, 72);
 		jPanel.add(jTypePanel);
+		
+		DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0);
+    	String binary;
+    	String hex;
+        for(int i = 0; i < ins.size(); i++){
+        	binary = "";
+        	hex = "";
+        	binary = Integer.toBinaryString(ins.get(i).getPC());
+            hex = Integer.toHexString(Integer.parseInt(binary, 2));
+            model.addRow(new Object[]{hex.toUpperCase(), ins.get(i).getBinHexStringIns()});
+        }
+        jTable.setModel(model); 
 		
 		rTypePanel.setVisible(false);
         iType1Panel.setVisible(false);
@@ -278,7 +297,6 @@ public class CodeGUI{
         btnAdd.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-            	boolean isNumeric = true;
             	boolean lablExist = false;
             	int j = 0;
             	
@@ -311,18 +329,7 @@ public class CodeGUI{
 		     	            			   break;
 		            					   
 		            		case "SD":
-		            		case "LD": 
-		//            					try {
-		//			            		     Integer.parseInt(txtOffset.getText());
-		//			            		}
-		//			            		catch (final NumberFormatException e1) {
-		//			            		     isNumeric = false;
-		//			            		}
-		//            			
-		//            				   if(isNumeric == false){
-		//            					   new JOptionPane().showMessageDialog(null, "Please enter hex values!");
-		//            				   }else 
-		            				   if(txtOffset.getText().length() != 4){
+		            		case "LD": if(txtOffset.getText().length() != 4){
 		            					   new JOptionPane().showMessageDialog(null, "Please limit input to 4 hex digits!");
 		            				   }else{
 			            				   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, 0, Integer.parseInt(cmbRt.getSelectedItem().toString()), Integer.parseInt(cmbBase.getSelectedItem().toString()), txtOffset.getText()));
@@ -333,8 +340,7 @@ public class CodeGUI{
 			            				   txtOffset.setText("");
 			            				   iType1Panel.setVisible(false);
 		            				   }break;
-		            		case "DADDUI": 
-		            					   if(txtImm.getText().length() != 4){
+		            		case "DADDUI": if(txtImm.getText().length() != 4){
 					    					   new JOptionPane().showMessageDialog(null, "Please limit input to 4 hex digits!");
 					    				   }else{
 			            					   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, Integer.parseInt(cmbRs.getSelectedItem().toString()), Integer.parseInt(cmbRt.getSelectedItem().toString()), 0, txtImm.getText()));
@@ -370,13 +376,12 @@ public class CodeGUI{
 		            	String hex = "";
 		            	
 		            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0);
-		            	model.addRow(new Object[]{"PC", "Instruction"});
 		                for(int i = 0; i < ins.size(); i++){
 		                	binary = "";
 		                	hex = "";
 		                	binary = Integer.toBinaryString(ins.get(i).getPC());
 		                    hex = Integer.toHexString(Integer.parseInt(binary, 2));
-		                    model.addRow(new Object[]{hex, ins.get(i).getBinHexStringIns()});
+		                    model.addRow(new Object[]{hex.toUpperCase(), ins.get(i).getBinHexStringIns()});
 		                }
 		                jTable.setModel(model); 
             		}	
@@ -410,13 +415,12 @@ public class CodeGUI{
             	String hex = "";
             	
             	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction", "Opcode(Hex)"}, 0);
-            	model.addRow(new Object[]{"PC", "Instruction", "Opcode(Hex)"});
                 for(i = 0; i < ins.size(); i++){
                 	binary = "";
                 	hex = "";
                 	binary = Integer.toBinaryString(ins.get(i).getPC());
                     hex = Integer.toHexString(Integer.parseInt(binary, 2));
-                    model.addRow(new Object[]{hex, ins.get(i).getBinHexStringIns(), ins.get(i).toHex()});
+                    model.addRow(new Object[]{hex.toUpperCase(), ins.get(i).getBinHexStringIns(), ins.get(i).toHex()});
                 }
                 jTable.setModel(model);            
             }
@@ -425,13 +429,8 @@ public class CodeGUI{
         btnBack.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-    			for(int i = 0; i < ins.size(); i++){
-    				System.out.print(ins.get(i).getBinHexStringIns().get(0) + " ");
-    				System.out.print(ins.get(i).getBinHexStringIns().get(1) + " ");
-    				System.out.println(ins.get(i).getBinHexStringIns().get(2));
-    			}
             	jFrame.dispose();
-            	new MainGUI(ins);
+            	new MainGUI(ins, reg, mem);
             }
         });
         

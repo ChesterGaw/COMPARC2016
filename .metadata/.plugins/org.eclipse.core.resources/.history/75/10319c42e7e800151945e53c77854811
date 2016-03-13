@@ -1,7 +1,0 @@
-package gui;
-
-public class MemoryGUI {
-	public MemoryGUI(ArrayList<Instructions> ins){
-		
-	}
-}
