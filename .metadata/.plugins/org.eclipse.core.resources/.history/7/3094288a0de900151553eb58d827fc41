@@ -120,13 +120,11 @@ public class RegisterGUI {
             public void actionPerformed(ActionEvent e){
             	if(newRValue1.getText().length() > 4 || newRValue2.getText().length() > 4 || newRValue3.getText().length() > 4 || newRValue4.getText().length() > 4){
             		new JOptionPane().showMessageDialog(null, "Please limit input to 4 values!");
-            	}else{
-	            	String regValue = newRValue1.getText() + " " + newRValue2.getText() + " " + newRValue3.getText() + " " + newRValue4.getText();
-	            	reg.get(row-1).setRegValue(regValue);
-	            	jFrame.dispose();
-	            	new RegisterGUI(ins, reg);
-	            	new JOptionPane().showMessageDialog(null, "Changes were successfully made!");
             	}
+            	String regValue = newRValue1.getText() + " " + newRValue2.getText() + " " + newRValue3.getText() + " " + newRValue4.getText();
+            	reg.get(row-1).setRegValue(regValue);
+            	jFrame.dispose();
+            	new RegisterGUI(ins, reg);
             }
         });
         
