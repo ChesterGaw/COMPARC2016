@@ -1,0 +1,13 @@
+package gui;
+
+public class MemoryGUI {
+    //construct components
+
+    //adjust size and set layout
+    setPreferredSize (new Dimension (784, 454));
+    setLayout (null);
+
+    //add components
+
+    //set component bounds (only needed by Absolute Positioning)
+}

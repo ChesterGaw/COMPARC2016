@@ -5,14 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -51,7 +44,7 @@ public class CodeGUI{
     private JButton btnBack = new JButton("Back");
 
     public CodeGUI(ArrayList<Instruction> ins) {    	
-        //adjust size and set layout
+        JScrollPane scrollPane = new JScrollPane();
     	
         jPanel.setPreferredSize (new Dimension(515, 554));
         jPanel.setLayout (null);
@@ -67,9 +60,13 @@ public class CodeGUI{
         
         lblOpHex.setBounds (335, 5, 100, 25);
         jPanel.add(lblOpHex);
-
-        jTable.setBounds(25, 41, 463, 345);
-        jPanel.add(jTable);
+        
+        scrollPane.setViewportView(jTable);
+        scrollPane.setBounds(25, 41, 463, 345);
+        scrollPane.setVisible(true);
+        jTable.setVisible(true);
+        jPanel.add(scrollPane);
+        
         
         lblLabel.setBounds(35, 401, 46, 14);
         jPanel.add(lblLabel);
