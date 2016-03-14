@@ -138,18 +138,18 @@ public class RegisterGUI {
             	boolean b3 = false;
             	boolean b4 = false;
             	
-            	if(v1.find())
+            	if(v1.find()){
             		b1 = true;
-            	
-            	if(v2.find())
+            	}
+            	if(v2.find()){
             		b2 = true;
-            	
-            	if(v3.find())
+            	}
+            	if(v3.find()){
             		b3 = true;
-            	
-            	if(v4.find())
+            	}
+            	if(v4.find()){
             		b4 = true;
-            	
+            	}
             	
             	if(newRValue1.getText().length() > 4 || newRValue2.getText().length() > 4 || newRValue3.getText().length() > 4 || newRValue4.getText().length() > 4){
             		new JOptionPane().showMessageDialog(null, "Please limit input to 4 values!");

@@ -136,14 +136,7 @@ public class CodeGUI{
 		jTypePanel.setBounds(198, 385, 181, 72);
 		jPanel.add(jTypePanel);
 		
-		
-    	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0) {
- 		   @Override
- 		   public boolean isCellEditable(int row, int column) {
- 		       return false;
- 		   }
-    	};
-    	
+		DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0);
     	String binary;
     	String hex;
         for(int i = 0; i < ins.size(); i++){
@@ -326,6 +319,29 @@ public class CodeGUI{
                     	String pattern = "[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F]";
 
                     	Pattern p = Pattern.compile(pattern);
+
+//                    	Matcher v1 = p.matcher(newRValue1.getText());
+//                    	Matcher v2 = p.matcher(newRValue2.getText());
+//                    	Matcher v3 = p.matcher(newRValue3.getText());
+//                    	Matcher v4 = p.matcher(newRValue4.getText());
+//                    	
+//                    	boolean b1 = false;
+//                    	boolean b2 = false;
+//                    	boolean b3 = false;
+//                    	boolean b4 = false;
+//                    	
+//                    	if(v1.find()){
+//                    		b1 = true;
+//                    	}
+//                    	if(v2.find()){
+//                    		b2 = true;
+//                    	}
+//                    	if(v3.find()){
+//                    		b3 = true;
+//                    	}
+//                    	if(v4.find()){
+//                    		b4 = true;
+//                    	}
             			
 			            switch(cmbIns.getSelectedItem().toString()){
 		            		case "DADDU":
@@ -361,18 +377,9 @@ public class CodeGUI{
 			            				   txtOffset.setText("");
 			            				   iType1Panel.setVisible(false);
 		            				   }break;
-		            		case "DADDUI": Matcher mImm = p.matcher(txtImm.getText());
-		            					   boolean bImm = false;
-		            					   
-		            					   if(mImm.find())
-		            						   bImm = true;
-		            					   
-		            					   if(txtImm.getText().length() != 4){
+		            		case "DADDUI": if(txtImm.getText().length() != 4){
 					    					   new JOptionPane().showMessageDialog(null, "Please limit input to 4 hex digits!");
-					    				   }else if(bImm == false){
-					    					   new JOptionPane().showMessageDialog(null, "Please enter Hex values only!");
-					    				   }
-					    				   else{
+					    				   }else{
 			            					   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, Integer.parseInt(cmbRs.getSelectedItem().toString()), Integer.parseInt(cmbRt.getSelectedItem().toString()), 0, txtImm.getText()));
 			        						   txtLabel.setText("");
 			        						   cmbIns.setSelectedIndex(0);
@@ -382,7 +389,7 @@ public class CodeGUI{
 			        						   iType2Panel.setVisible(false);
 		            					   }break;
 		            		case "BEQC":if(txtOffset.getText().length() == 0){
-				            				 new JOptionPane().showMessageDialog(null, "Offset is empty!");
+				            				 new JOptionPane().showMessageDialog(null, "Offset is empty");
 				     				    }else{
 				     				    	 ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, Integer.parseInt(cmbRs.getSelectedItem().toString()), Integer.parseInt(cmbRt.getSelectedItem().toString()), 0, txtOffset.getText()));
 			            					 txtLabel.setText("");
@@ -393,7 +400,7 @@ public class CodeGUI{
 			  				                 iType3Panel.setVisible(false);
 				     				     }break;
 		            		case "BC": if(txtOffset.getText().length() == 0){
-		            						new JOptionPane().showMessageDialog(null, "Offset is empty!");
+		            						new JOptionPane().showMessageDialog(null, "Offset is empty");
 		            				   }else{
 			            				   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, 0, 0, 0, txtOffset.getText()));
 			            				   txtLabel.setText("");
@@ -405,13 +412,8 @@ public class CodeGUI{
 			            String binary = "";
 		            	String hex = "";
 		            	
-		            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0) {
-		         		   @Override
-		         		   public boolean isCellEditable(int row, int column) {
-		         		       return false;
-		         		   }
-		            	};
-		            	for(int i = 0; i < ins.size(); i++){
+		            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0);
+		                for(int i = 0; i < ins.size(); i++){
 		                	binary = "";
 		                	hex = "";
 		                	binary = Integer.toBinaryString(ins.get(i).getPC());
@@ -449,13 +451,7 @@ public class CodeGUI{
             	String binary = "";
             	String hex = "";
             	
-            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction", "OpCode(Hex)"}, 0) {
-	         		   @Override
-	         		   public boolean isCellEditable(int row, int column) {
-	         		       return false;
-	         		   }
-	            };
-	            
+            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction", "Opcode(Hex)"}, 0);
                 for(i = 0; i < ins.size(); i++){
                 	binary = "";
                 	hex = "";

@@ -22,7 +22,7 @@ public class MainGUI{
 
     public MainGUI(ArrayList<Instruction> ins, ArrayList<Register> reg, ArrayList<Memory> mem) {
     	
-        jPanel.setPreferredSize (new Dimension(272, 285));
+        jPanel.setPreferredSize (new Dimension (272, 247));
         jPanel.setLayout (null);
 
         //add components

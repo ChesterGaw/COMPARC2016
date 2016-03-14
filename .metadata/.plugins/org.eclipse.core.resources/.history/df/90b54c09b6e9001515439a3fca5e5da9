@@ -124,38 +124,19 @@ public class RegisterGUI {
         btnEdit.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-            	String pattern = "[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F]";
+//            	String line = "pwet r1";
+            	String pattern = "^ *[0-9a-fA-F]+ *$";
 
-            	Pattern p = Pattern.compile(pattern);
+            	Pattern r = Pattern.compile(pattern);
 
-            	Matcher v1 = p.matcher(newRValue1.getText());
-            	Matcher v2 = p.matcher(newRValue2.getText());
-            	Matcher v3 = p.matcher(newRValue3.getText());
-            	Matcher v4 = p.matcher(newRValue4.getText());
-            	
-            	boolean b1 = false;
-            	boolean b2 = false;
-            	boolean b3 = false;
-            	boolean b4 = false;
-            	
-            	if(v1.find())
-            		b1 = true;
-            	
-            	if(v2.find())
-            		b2 = true;
-            	
-            	if(v3.find())
-            		b3 = true;
-            	
-            	if(v4.find())
-            		b4 = true;
-            	
+            	Matcher m = r.matcher(line);
+            	if(m.find()){
+
+            	}
             	
             	if(newRValue1.getText().length() > 4 || newRValue2.getText().length() > 4 || newRValue3.getText().length() > 4 || newRValue4.getText().length() > 4){
             		new JOptionPane().showMessageDialog(null, "Please limit input to 4 values!");
-            	}else if(b1 == false || b2 == false || b3 == false || b4 == false)
-            		new JOptionPane().showMessageDialog(null, "Please enter Hex values only!");
-            	else{
+            	}else{
 	            	String regValue = newRValue1.getText() + " " + newRValue2.getText() + " " + newRValue3.getText() + " " + newRValue4.getText();
 	            	reg.get(row).setRegValue(regValue);
 	            	jFrame.dispose();

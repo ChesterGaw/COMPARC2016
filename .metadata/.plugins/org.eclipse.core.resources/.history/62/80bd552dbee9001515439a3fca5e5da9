@@ -52,6 +52,7 @@ public class MainGUI{
             @Override
             public void actionPerformed(ActionEvent e){
             	frame.dispose();
+            	System.exit(0);
             	new CodeGUI(ins, reg, mem);
             }
         });

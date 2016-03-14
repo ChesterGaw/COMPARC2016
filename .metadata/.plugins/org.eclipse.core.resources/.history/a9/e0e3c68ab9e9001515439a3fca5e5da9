@@ -4,8 +4,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -136,14 +134,7 @@ public class CodeGUI{
 		jTypePanel.setBounds(198, 385, 181, 72);
 		jPanel.add(jTypePanel);
 		
-		
-    	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0) {
- 		   @Override
- 		   public boolean isCellEditable(int row, int column) {
- 		       return false;
- 		   }
-    	};
-    	
+		DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0);
     	String binary;
     	String hex;
         for(int i = 0; i < ins.size(); i++){
@@ -323,10 +314,6 @@ public class CodeGUI{
 		    			}
             		}
             		if(lablExist == false  || txtLabel.getText().length() == 0){
-                    	String pattern = "[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F]";
-
-                    	Pattern p = Pattern.compile(pattern);
-            			
 			            switch(cmbIns.getSelectedItem().toString()){
 		            		case "DADDU":
 		            		case "DMULU":
@@ -342,16 +329,8 @@ public class CodeGUI{
 		     	            			   break;
 		            					   
 		            		case "SD":
-		            		case "LD": Matcher mOffset = p.matcher(txtOffset.getText());
-		            				   boolean bOffset = false;
-		            				   
-		            				   if(mOffset.find())
-		            					   bOffset = true;
-		            				   
-		            				   if(txtOffset.getText().length() != 4){
+		            		case "LD": if(txtOffset.getText().length() != 4){
 		            					   new JOptionPane().showMessageDialog(null, "Please limit input to 4 hex digits!");
-		            				   }else if(bOffset == false){
-		            					   new JOptionPane().showMessageDialog(null, "Please enter Hex values only!");
 		            				   }else{
 			            				   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, 0, Integer.parseInt(cmbRt.getSelectedItem().toString()), Integer.parseInt(cmbBase.getSelectedItem().toString()), txtOffset.getText()));
 			            				   txtLabel.setText("");
@@ -361,18 +340,9 @@ public class CodeGUI{
 			            				   txtOffset.setText("");
 			            				   iType1Panel.setVisible(false);
 		            				   }break;
-		            		case "DADDUI": Matcher mImm = p.matcher(txtImm.getText());
-		            					   boolean bImm = false;
-		            					   
-		            					   if(mImm.find())
-		            						   bImm = true;
-		            					   
-		            					   if(txtImm.getText().length() != 4){
+		            		case "DADDUI": if(txtImm.getText().length() != 4){
 					    					   new JOptionPane().showMessageDialog(null, "Please limit input to 4 hex digits!");
-					    				   }else if(bImm == false){
-					    					   new JOptionPane().showMessageDialog(null, "Please enter Hex values only!");
-					    				   }
-					    				   else{
+					    				   }else{
 			            					   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, Integer.parseInt(cmbRs.getSelectedItem().toString()), Integer.parseInt(cmbRt.getSelectedItem().toString()), 0, txtImm.getText()));
 			        						   txtLabel.setText("");
 			        						   cmbIns.setSelectedIndex(0);
@@ -382,7 +352,7 @@ public class CodeGUI{
 			        						   iType2Panel.setVisible(false);
 		            					   }break;
 		            		case "BEQC":if(txtOffset.getText().length() == 0){
-				            				 new JOptionPane().showMessageDialog(null, "Offset is empty!");
+				            				 new JOptionPane().showMessageDialog(null, "Offset is empty");
 				     				    }else{
 				     				    	 ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, Integer.parseInt(cmbRs.getSelectedItem().toString()), Integer.parseInt(cmbRt.getSelectedItem().toString()), 0, txtOffset.getText()));
 			            					 txtLabel.setText("");
@@ -393,7 +363,7 @@ public class CodeGUI{
 			  				                 iType3Panel.setVisible(false);
 				     				     }break;
 		            		case "BC": if(txtOffset.getText().length() == 0){
-		            						new JOptionPane().showMessageDialog(null, "Offset is empty!");
+		            						new JOptionPane().showMessageDialog(null, "Offset is empty");
 		            				   }else{
 			            				   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, 0, 0, 0, txtOffset.getText()));
 			            				   txtLabel.setText("");
@@ -405,13 +375,8 @@ public class CodeGUI{
 			            String binary = "";
 		            	String hex = "";
 		            	
-		            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0) {
-		         		   @Override
-		         		   public boolean isCellEditable(int row, int column) {
-		         		       return false;
-		         		   }
-		            	};
-		            	for(int i = 0; i < ins.size(); i++){
+		            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0);
+		                for(int i = 0; i < ins.size(); i++){
 		                	binary = "";
 		                	hex = "";
 		                	binary = Integer.toBinaryString(ins.get(i).getPC());
@@ -449,13 +414,7 @@ public class CodeGUI{
             	String binary = "";
             	String hex = "";
             	
-            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction", "OpCode(Hex)"}, 0) {
-	         		   @Override
-	         		   public boolean isCellEditable(int row, int column) {
-	         		       return false;
-	         		   }
-	            };
-	            
+            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction", "Opcode(Hex)"}, 0);
                 for(i = 0; i < ins.size(); i++){
                 	binary = "";
                 	hex = "";

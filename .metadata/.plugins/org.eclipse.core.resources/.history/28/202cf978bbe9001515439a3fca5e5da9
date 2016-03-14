@@ -142,8 +142,7 @@ public class CodeGUI{
  		   public boolean isCellEditable(int row, int column) {
  		       return false;
  		   }
-    	};
-    	
+ 	};
     	String binary;
     	String hex;
         for(int i = 0; i < ins.size(); i++){
@@ -405,13 +404,8 @@ public class CodeGUI{
 			            String binary = "";
 		            	String hex = "";
 		            	
-		            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0) {
-		         		   @Override
-		         		   public boolean isCellEditable(int row, int column) {
-		         		       return false;
-		         		   }
-		            	};
-		            	for(int i = 0; i < ins.size(); i++){
+		            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0);
+		                for(int i = 0; i < ins.size(); i++){
 		                	binary = "";
 		                	hex = "";
 		                	binary = Integer.toBinaryString(ins.get(i).getPC());
@@ -449,13 +443,7 @@ public class CodeGUI{
             	String binary = "";
             	String hex = "";
             	
-            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction", "OpCode(Hex)"}, 0) {
-	         		   @Override
-	         		   public boolean isCellEditable(int row, int column) {
-	         		       return false;
-	         		   }
-	            };
-	            
+            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction", "Opcode(Hex)"}, 0);
                 for(i = 0; i < ins.size(); i++){
                 	binary = "";
                 	hex = "";

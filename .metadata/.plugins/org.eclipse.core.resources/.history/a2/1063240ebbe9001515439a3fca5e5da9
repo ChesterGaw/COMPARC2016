@@ -8,9 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -21,7 +18,7 @@ import comparc.Register;
 import java.awt.BorderLayout;
 
 public class MemoryGUI {
-	private JFrame jFrame = new JFrame("Memory");
+	private JFrame jFrame = new JFrame();
 	private JPanel mainPanel = new JPanel();
 	private JPanel editPanel = new JPanel();
 	private JPanel gotoPanel = new JPanel();
@@ -124,21 +121,9 @@ public class MemoryGUI {
 	    btnEdit.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-            	String pattern = "[0-9a-fA-F][0-9a-fA-F]";
-
-            	Pattern p = Pattern.compile(pattern);
-
-            	Matcher mNewMemVal = p.matcher(txtNewMemoryValue.getText());
-            	boolean bNewMemVal = false;
-            	
-            	if(mNewMemVal.find())
-            		bNewMemVal = true;
-            	
+            	//carvin check hex txtNewMemoryValue
             	if(txtNewMemoryValue.getText().length() != 2)
             		new JOptionPane().showMessageDialog(null, "Please input 2 characters!");
-            	else if(bNewMemVal == false){
-            		new JOptionPane().showMessageDialog(null, "Please enter Hex Values only!");
-            	}
             	else{
             		mem.get(row).setData(txtNewMemoryValue.getText());
             		jFrame.dispose();

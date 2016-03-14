@@ -21,8 +21,19 @@ public class MainGUI{
     private JButton btnExit = new JButton ("Exit");
 
     public MainGUI(ArrayList<Instruction> ins, ArrayList<Register> reg, ArrayList<Memory> mem) {
+        //adjust size and set layout
+//    	try {
+//    	    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+//    	        if ("Nimbus".equals(info.getName())) {
+//    	            UIManager.setLookAndFeel(info.getClassName());
+//    	            break;
+//    	        }
+//    	    }
+//    	} catch (Exception e) {
+//    	    // If Nimbus is not available, you can set the GUI to another look and feel.
+//    	}
     	
-        jPanel.setPreferredSize (new Dimension(272, 285));
+        jPanel.setPreferredSize (new Dimension (272, 247));
         jPanel.setLayout (null);
 
         //add components
@@ -69,13 +80,6 @@ public class MainGUI{
             public void actionPerformed(ActionEvent e){
             	frame.dispose();
             	new MemoryGUI(ins, reg, mem);
-            }
-        });
-        
-        btnPipeline.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-            	frame.dispose();
             }
         });
         

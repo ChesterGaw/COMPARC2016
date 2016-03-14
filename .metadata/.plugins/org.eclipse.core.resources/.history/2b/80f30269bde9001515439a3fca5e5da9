@@ -21,7 +21,7 @@ import comparc.Register;
 import java.awt.BorderLayout;
 
 public class MemoryGUI {
-	private JFrame jFrame = new JFrame("Memory");
+	private JFrame jFrame = new JFrame();
 	private JPanel mainPanel = new JPanel();
 	private JPanel editPanel = new JPanel();
 	private JPanel gotoPanel = new JPanel();
