@@ -237,6 +237,13 @@ public class Instruction {
 	public String getLabel(){
 		return this.Label;
 	}
+	public String getRt(){
+		return this.Rt;
+	}
+	
+	public String getRd(){
+		return this.Rd;
+	}
 	
 	public void setBinImm(String imm){
 		if(this.Ins == "BC"){
@@ -285,5 +292,17 @@ public class Instruction {
 
 	public void setWB(int wB) {
 		WB = wB;
+	}
+	
+	public String getBinA(){
+		return binA;
+	}
+	
+	public String getBinB(){
+		return binB;
+	}
+	
+	public String getBinImm(){
+		return binImm;
 	}
 }

@@ -4,7 +4,7 @@ public class Cycle {
 	private int cycleNum;
 	private int IFID_index;
 	private String IFID_IR;
-	private int IFID_NPC;
+	private String IFID_NPC;
 	private int IDEX_index;
 	private String IDEX_A;
 	private String IDEX_B;
@@ -12,7 +12,7 @@ public class Cycle {
 	private String IDEX_IR;
 	private int EXMEM_index;
 	private String EXMEM_ALU;
-	private String EXMEM_Cond;
+	private boolean EXMEM_Cond;
 	private String EXMEM_Ir;
 	private String EXMEM_B;
 	private int MEMWB_index;
@@ -23,16 +23,20 @@ public class Cycle {
 	
 	public Cycle(){
 		cycleNum = 0;
+		IFID_index = -1;
 		IFID_IR = "";
-		IFID_NPC = 0;
+		IFID_NPC = "";
+		IDEX_index = -1;
 		IDEX_A = "";
 		IDEX_B = "";
 		IDEX_Imm = "";
 		IDEX_IR = "";
+		EXMEM_index = -1;
 		EXMEM_ALU = "";
-		EXMEM_Cond = "";
+		EXMEM_Cond = false;
 		EXMEM_Ir = "";
 		EXMEM_B = "";
+		MEMWB_index = -1;
 		MEMWB_LMD = "";
 		MEMWB_IR = "";
 		MEMWB_ALU = "";
@@ -47,7 +51,7 @@ public class Cycle {
 		return IFID_IR;
 	}
 	
-	public int getIFID_NPC() {
+	public String getIFID_NPC() {
 		return IFID_NPC;
 	}
 	
@@ -71,7 +75,7 @@ public class Cycle {
 		return EXMEM_ALU;
 	}
 	
-	public String getEXMEM_Cond() {
+	public boolean getEXMEM_Cond() {
 		return EXMEM_Cond;
 	}
 	
@@ -107,7 +111,7 @@ public class Cycle {
 		IFID_IR = iFID_IR;
 	}
 	
-	public void setIFID_NPC(int iFID_NPC) {
+	public void setIFID_NPC(String iFID_NPC) {
 		IFID_NPC = iFID_NPC;
 	}
 	
@@ -131,7 +135,7 @@ public class Cycle {
 		EXMEM_ALU = eXMEM_ALU;
 	}
 	
-	public void setEXMEM_Cond(String eXMEM_Cond) {
+	public void setEXMEM_Cond(boolean eXMEM_Cond) {
 		EXMEM_Cond = eXMEM_Cond;
 	}
 	
