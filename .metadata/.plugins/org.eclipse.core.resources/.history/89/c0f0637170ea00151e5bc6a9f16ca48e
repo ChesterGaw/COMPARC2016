@@ -1,0 +1,27 @@
+package gui;
+
+import java.awt.Dimension;
+import java.util.ArrayList;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import comparc.Instruction;
+import comparc.Memory;
+import comparc.Register;
+
+public class RunGUI {
+	public JFrame jFrame = new JFrame("Run");
+	public JPanel jPanel = new JPanel();
+	
+	public RunGUI(ArrayList<Instruction> ins, ArrayList<Memory> mem, ArrayList<Register> reg){
+		jPanel.setPreferredSize (new Dimension(272, 285));
+        jPanel.setLayout (null);
+		
+		jFrame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+        jFrame.getContentPane().add(jPanel);
+        jFrame.pack();
+        jFrame.setVisible (true);
+        jFrame.setLocationRelativeTo(null);
+	}
+}

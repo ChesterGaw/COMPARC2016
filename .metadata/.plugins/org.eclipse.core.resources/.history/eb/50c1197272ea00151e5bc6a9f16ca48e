@@ -1,0 +1,45 @@
+package gui;
+
+import java.awt.Dimension;
+import java.util.ArrayList;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import comparc.Instruction;
+import comparc.Memory;
+import comparc.Register;
+import javax.swing.JScrollPane;
+import javax.swing.JLabel;
+
+public class RunGUI {
+	public JFrame jFrame = new JFrame("Run");
+	public JPanel mainPanel = new JPanel();
+	
+	public RunGUI(ArrayList<Instruction> ins, ArrayList<Memory> mem, ArrayList<Register> reg){
+		mainPanel.setPreferredSize (new Dimension(750, 500));
+        mainPanel.setLayout (null);
+		
+		jFrame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+        jFrame.getContentPane().add(mainPanel);
+        
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBounds(10, 39, 358, 225);
+        mainPanel.add(scrollPane);
+        
+        JLabel lblPipelineMap = new JLabel("Pipeline Map");
+        lblPipelineMap.setBounds(10, 11, 79, 17);
+        mainPanel.add(lblPipelineMap);
+        
+        JLabel lblCycleVariables = new JLabel("Cycle Variables");
+        lblCycleVariables.setBounds(378, 12, 90, 14);
+        mainPanel.add(lblCycleVariables);
+        
+        JScrollPane scrollPane_1 = new JScrollPane();
+        scrollPane_1.setBounds(378, 39, 358, 450);
+        mainPanel.add(scrollPane_1);
+        jFrame.pack();
+        jFrame.setVisible (true);
+        jFrame.setLocationRelativeTo(null);
+	}
+}
