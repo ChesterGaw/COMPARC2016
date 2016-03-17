@@ -65,7 +65,7 @@ public class RegisterGUI {
     		   }
     	};
     	
-        for(int i = 0; i < reg.size(); i++){
+        for(int i = 1; i < reg.size(); i++){
         	model.addRow(new Object[]{reg.get(i).getReg(), reg.get(i).getRegValue()});
         }
         jTable.setModel(model); 
@@ -157,7 +157,7 @@ public class RegisterGUI {
             		new JOptionPane().showMessageDialog(null, "Please enter Hex values only!");
             	else{
 	            	String regValue = newRValue1.getText() + " " + newRValue2.getText() + " " + newRValue3.getText() + " " + newRValue4.getText();
-	            	reg.get(row).setRegValue(regValue);
+	            	reg.get(row + 1).setRegValue(regValue);
 	            	jFrame.dispose();
 	            	new RegisterGUI(ins, reg, mem);
 	            	new JOptionPane().showMessageDialog(null, "Changes were successfully made!");

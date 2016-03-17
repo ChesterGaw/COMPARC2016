@@ -177,7 +177,7 @@ public class Instruction {
 		String hex = "";
 		String temp = "";
 		
-		for(int i = 0; i < bin.length(); i+=4){
+		for(int i = 0; i < bin.length(); i += 4){
 			temp += bin.charAt(i);
 			temp += bin.charAt(i + 1);
 			temp += bin.charAt(i + 2);
@@ -247,8 +247,8 @@ public class Instruction {
 	
 	public void setBinImm(String imm){
 		if(this.Ins == "BC"){
-			this.binA = imm.substring(0, 4);
-			this.binB = imm.substring(5, 9);
+			this.binA = imm.substring(0, 5);
+			this.binB = imm.substring(5, 10);
 			this.binImm = imm.substring(10);
 		}else
 			this.binImm = imm.substring(10);

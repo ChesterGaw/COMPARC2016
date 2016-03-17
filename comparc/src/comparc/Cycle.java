@@ -10,13 +10,15 @@ public class Cycle {
 	private String IDEX_B;
 	private String IDEX_Imm;
 	private String IDEX_IR;
+	private String IDEX_NPC;
 	private int EXMEM_index;
 	private String EXMEM_ALU;
 	private boolean EXMEM_Cond;
-	private String EXMEM_Ir;
+	private String EXMEM_IR;
 	private String EXMEM_B;
 	private int MEMWB_index;
 	private String MEMWB_LMD;
+	private String MEMWB_range;
 	private String MEMWB_IR;
 	private String MEMWB_ALU;
 	private String Rn;
@@ -31,13 +33,15 @@ public class Cycle {
 		IDEX_B = "";
 		IDEX_Imm = "";
 		IDEX_IR = "";
+		IDEX_NPC = "";
 		EXMEM_index = -1;
 		EXMEM_ALU = "";
 		EXMEM_Cond = false;
-		EXMEM_Ir = "";
+		EXMEM_IR = "";
 		EXMEM_B = "";
 		MEMWB_index = -1;
 		MEMWB_LMD = "";
+		MEMWB_range = "";
 		MEMWB_IR = "";
 		MEMWB_ALU = "";
 		Rn = "";
@@ -79,8 +83,8 @@ public class Cycle {
 		return EXMEM_Cond;
 	}
 	
-	public String getEXMEM_Ir() {
-		return EXMEM_Ir;
+	public String getEXMEM_IR() {
+		return EXMEM_IR;
 	}
 	
 	public String getEXMEM_B() {
@@ -139,8 +143,8 @@ public class Cycle {
 		EXMEM_Cond = eXMEM_Cond;
 	}
 	
-	public void setEXMEM_Ir(String eXMEM_Ir) {
-		EXMEM_Ir = eXMEM_Ir;
+	public void setEXMEM_IR(String eXMEM_IR) {
+		EXMEM_IR = eXMEM_IR;
 	}
 	
 	public void setEXMEM_B(String eXMEM_B) {
@@ -193,5 +197,21 @@ public class Cycle {
 
 	public void setMEMWB_index(int mEMWB_index) {
 		MEMWB_index = mEMWB_index;
+	}
+
+	public String getMEMWB_range() {
+		return MEMWB_range;
+	}
+
+	public void setMEMWB_range(String mEMWB_range) {
+		MEMWB_range = mEMWB_range;
+	}
+
+	public String getIDEX_NPC() {
+		return IDEX_NPC;
+	}
+
+	public void setIDEX_NPC(String iDEX_NPC) {
+		IDEX_NPC = iDEX_NPC;
 	}
 }

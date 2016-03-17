@@ -430,16 +430,13 @@ public class CodeGUI{
             	
             	int i = 0;
             	int j = 0;
-            	int x = 0;
             	String temp = "";
             	for(i = 0; i < ins.size(); i++){
             		if(ins.get(i).getIns() == "BEQC" || ins.get(i).getIns() == "BC"){
             			temp = ins.get(i).getOffset() + ":";
             			for(j = 0; j < ins.size(); j++){
             				if(temp.equalsIgnoreCase(ins.get(j).getLabel())){
-            					x = (ins.get(j).getPC() - ins.get(i).getPC()) / 4;
             					ins.get(i).setBinImm(signExtend((ins.get(j).getPC() - ins.get(i).getPC()) / 4, 26));
-            					System.out.println(x);
             					j = ins.size() + 1;
             				}
             			}

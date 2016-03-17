@@ -10,7 +10,7 @@ public class Driver {
 		ArrayList<Register> reg = new ArrayList<Register>();
 		ArrayList<Memory> mem = new ArrayList<Memory>();
 		
-		for(int i = 1; i < 32; i++){
+		for(int i = 0; i < 32; i++){
 			String iString = "R" +  String.valueOf(i);
 			reg.add(new Register(iString));
 		}
