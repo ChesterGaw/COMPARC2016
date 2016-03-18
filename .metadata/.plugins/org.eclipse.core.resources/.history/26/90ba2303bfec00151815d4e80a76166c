@@ -165,8 +165,6 @@ public class MemoryGUI {
             	
             	if(newLoc.length() != 4)
             		new JOptionPane().showMessageDialog(null, "Please input 4 characters!");
-            	else if(bNewMemLoc == false)
-            	    new JOptionPane().showMessageDialog(null, "Please limit input to hex characters only!");
             	else{
             		
             		for(int i = 0; i < jTable.getRowCount(); i++){

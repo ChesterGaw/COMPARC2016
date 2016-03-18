@@ -352,7 +352,6 @@ public class CodeGUI{
 		            					   new JOptionPane().showMessageDialog(null, "Please limit input to 4 hex digits!");
 		            				   }else if(bOffset == false){
 		            					   new JOptionPane().showMessageDialog(null, "Please limit hex input from 0000 - 1FFF!");
-		            				   }
 		            				   else{
 			            				   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, 0, Integer.parseInt(cmbRt.getSelectedItem().toString()), Integer.parseInt(cmbBase.getSelectedItem().toString()), txtOffset.getText()));
 			            				   txtLabel.setText("");

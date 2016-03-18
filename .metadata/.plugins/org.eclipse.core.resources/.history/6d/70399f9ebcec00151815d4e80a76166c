@@ -486,7 +486,6 @@ public class RunGUI {
             		new JOptionPane().showMessageDialog(null, "Cycle at max!");
             	}
             	else{
-            		lblCycleNumber.setText(Integer.toString(cycle));
             		model.setRowCount(0);
 	        	    model.addRow(new Object[]{"Cycle Number", cycles.get(cycle - 1).getCycleNum()});
 	        	    model.addRow(new Object[]{"IF", " "});
@@ -511,7 +510,6 @@ public class RunGUI {
 	        	    model.addRow(new Object[]{"MEM/WB.ALUOutput", cycles.get(cycle - 1).getMEMWB_ALU()});
 	        	    model.addRow(new Object[]{"WB", " "});
 	        	    model.addRow(new Object[]{"Rn", cycles.get(cycle - 1).getRn()});
-	        	    model.fireTableDataChanged();
 	        	    cycleTable.setModel(model);
             	}
             }
@@ -520,40 +518,7 @@ public class RunGUI {
         btnPrevCycle.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-            	cycle -= 1;
-            	if(cycle == 0){
-            		cycle += 1;
-            		new JOptionPane().showMessageDialog(null, "Cycle at min!");
-            	}
-            	else{
-            		lblCycleNumber.setText(Integer.toString(cycle));
-            		model.setRowCount(0);
-	        	    model.addRow(new Object[]{"Cycle Number", cycles.get(cycle - 1).getCycleNum()});
-	        	    model.addRow(new Object[]{"IF", " "});
-	        	    model.addRow(new Object[]{"IF/ID.IR", cycles.get(cycle - 1).getIFID_IR()});
-	        	    model.addRow(new Object[]{"IF/ID.NPC", cycles.get(cycle - 1).getIFID_NPC()});
-	        	    model.addRow(new Object[]{"PC", cycles.get(cycle - 1).getIFID_NPC()});
-	        	    model.addRow(new Object[]{"ID", " "});
-	        	    model.addRow(new Object[]{"ID/EX.A", cycles.get(cycle - 1).getIDEX_A()});
-	        	    model.addRow(new Object[]{"ID/EX.B", cycles.get(cycle - 1).getIDEX_B()});
-	        	    model.addRow(new Object[]{"ID/EX.Imm", cycles.get(cycle - 1).getIDEX_Imm()});
-	        	    model.addRow(new Object[]{"ID/EX.IR", cycles.get(cycle - 1).getIDEX_IR()});
-	        	    model.addRow(new Object[]{"ID/EX.NPC", cycles.get(cycle - 1).getIDEX_NPC()});
-	        	    model.addRow(new Object[]{"EX", " "});
-	        	    model.addRow(new Object[]{"EX/MEM.ALUOutput", cycles.get(cycle - 1).getEXMEM_ALU()});
-	        	    model.addRow(new Object[]{"EX/MEM.COND", cycles.get(cycle - 1).getEXMEM_Cond()});
-	        	    model.addRow(new Object[]{"EX/MEM.IR", cycles.get(cycle - 1).getEXMEM_IR()});
-	        	    model.addRow(new Object[]{"EX/MEM.B", cycles.get(cycle - 1).getEXMEM_B()});
-	        	    model.addRow(new Object[]{"MEM", " "});
-	        	    model.addRow(new Object[]{"MEM/WB.LMD", cycles.get(cycle - 1).getMEMWB_LMD()});
-	        	    model.addRow(new Object[]{"Range of memory locations affected", cycles.get(cycle - 1).getMEMWB_range()});
-	        	    model.addRow(new Object[]{"MEM/WB.IR", cycles.get(cycle - 1).getMEMWB_IR()});
-	        	    model.addRow(new Object[]{"MEM/WB.ALUOutput", cycles.get(cycle - 1).getMEMWB_ALU()});
-	        	    model.addRow(new Object[]{"WB", " "});
-	        	    model.addRow(new Object[]{"Rn", cycles.get(cycle - 1).getRn()});
-	        	    model.fireTableDataChanged();
-	        	    cycleTable.setModel(model);
-            	}
+            	
             }
         });
         
@@ -563,7 +528,12 @@ public class RunGUI {
             	model.setRowCount(0);
             	for(int cycle = 1; cycle < cycles.size() + 1;cycle++){
             		lblCycleNumber.setText(Integer.toString(cycle));
-            		
+                    DefaultTableModel model = new DefaultTableModel(new Object[]{" ", " "}, 0) {
+            	  		   @Override
+            	  		   public boolean isCellEditable(int row, int column) {
+            	  		       return false;
+            	  		   }
+            	    };
             	    model.setRowCount(0);
             	    model.addRow(new Object[]{"Cycle Number", cycles.get(cycle - 1).getCycleNum()});
             	    model.addRow(new Object[]{"IF", " "});
@@ -588,8 +558,9 @@ public class RunGUI {
             	    model.addRow(new Object[]{"MEM/WB.ALUOutput", cycles.get(cycle - 1).getMEMWB_ALU()});
             	    model.addRow(new Object[]{"WB", " "});
             	    model.addRow(new Object[]{"Rn", cycles.get(cycle - 1).getRn()});
-            	    model.fireTableDataChanged();
             	    cycleTable.setModel(model);
+            	    model.fireTableDataChanged();
+            	    cycleTable.repaint();
             	    try {
 						Thread.sleep(500);
 					} catch (InterruptedException e1) {

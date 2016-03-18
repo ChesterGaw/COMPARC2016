@@ -311,14 +311,14 @@ public class CodeGUI{
             	
             	if(txtLabel.getText().length() != 0 && txtLabel.getText().charAt(txtLabel.getText().length() - 1) != ':'){
             		if(txtLabel.getText().length() == 1)
-						new JOptionPane().showMessageDialog(null, "Please input a valid label");
+						new JOptionPane().showMessageDialog(null, "Please input a valid label!");
             		else
-            			new JOptionPane().showMessageDialog(null, "Label is incorrect. Please add a ':' to label");
+            			new JOptionPane().showMessageDialog(null, "Label is incorrect. Please add a ':' to label!");
             	}else{
             		if(txtLabel.getText().length() != 0){
             			for(j = 0; j < ins.size(); j++)
             				if(txtLabel.getText().equalsIgnoreCase(ins.get(j).getLabel())){
-            					new JOptionPane().showMessageDialog(null, "Label is already existing");
+            					new JOptionPane().showMessageDialog(null, "Label is already existing!");
             					lablExist = true;
 		    			}
             		}
@@ -352,7 +352,6 @@ public class CodeGUI{
 		            					   new JOptionPane().showMessageDialog(null, "Please limit input to 4 hex digits!");
 		            				   }else if(bOffset == false){
 		            					   new JOptionPane().showMessageDialog(null, "Please limit hex input from 0000 - 1FFF!");
-		            				   }
 		            				   else{
 			            				   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, 0, Integer.parseInt(cmbRt.getSelectedItem().toString()), Integer.parseInt(cmbBase.getSelectedItem().toString()), txtOffset.getText()));
 			            				   txtLabel.setText("");

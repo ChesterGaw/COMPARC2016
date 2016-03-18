@@ -323,7 +323,7 @@ public class CodeGUI{
 		    			}
             		}
             		if(lablExist == false  || txtLabel.getText().length() == 0){
-                    	String pattern = "[0-1][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F]";
+                    	String pattern = "[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F]";
 
                     	Pattern p = Pattern.compile(pattern);
             			
@@ -351,9 +351,8 @@ public class CodeGUI{
 		            				   if(txtOffset.getText().length() != 4){
 		            					   new JOptionPane().showMessageDialog(null, "Please limit input to 4 hex digits!");
 		            				   }else if(bOffset == false){
-		            					   new JOptionPane().showMessageDialog(null, "Please limit hex input from 0000 - 1FFF!");
-		            				   }
-		            				   else{
+		            					   new JOptionPane().showMessageDialog(null, "Please enter Hex values only!");
+		            				   }else{
 			            				   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, 0, Integer.parseInt(cmbRt.getSelectedItem().toString()), Integer.parseInt(cmbBase.getSelectedItem().toString()), txtOffset.getText()));
 			            				   txtLabel.setText("");
 			            				   cmbIns.setSelectedIndex(0);
@@ -371,7 +370,7 @@ public class CodeGUI{
 		            					   if(txtImm.getText().length() != 4){
 					    					   new JOptionPane().showMessageDialog(null, "Please limit input to 4 hex digits!");
 					    				   }else if(bImm == false){
-					    					   new JOptionPane().showMessageDialog(null, "Please limit hex input from 0000 - 1FFF!");
+					    					   new JOptionPane().showMessageDialog(null, "Please enter Hex values only!");
 					    				   }
 					    				   else{
 			            					   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, Integer.parseInt(cmbRs.getSelectedItem().toString()), Integer.parseInt(cmbRt.getSelectedItem().toString()), 0, txtImm.getText()));

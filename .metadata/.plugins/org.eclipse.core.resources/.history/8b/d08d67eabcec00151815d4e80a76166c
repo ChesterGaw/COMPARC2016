@@ -523,7 +523,7 @@ public class RunGUI {
             	cycle -= 1;
             	if(cycle == 0){
             		cycle += 1;
-            		new JOptionPane().showMessageDialog(null, "Cycle at min!");
+            		new JOptionPane().showMessageDialog(null, "Cycle at max!");
             	}
             	else{
             		lblCycleNumber.setText(Integer.toString(cycle));
@@ -588,8 +588,9 @@ public class RunGUI {
             	    model.addRow(new Object[]{"MEM/WB.ALUOutput", cycles.get(cycle - 1).getMEMWB_ALU()});
             	    model.addRow(new Object[]{"WB", " "});
             	    model.addRow(new Object[]{"Rn", cycles.get(cycle - 1).getRn()});
-            	    model.fireTableDataChanged();
             	    cycleTable.setModel(model);
+            	    model.fireTableDataChanged();
+            	    cycleTable.repaint();
             	    try {
 						Thread.sleep(500);
 					} catch (InterruptedException e1) {

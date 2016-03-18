@@ -73,14 +73,8 @@ public class MainGUI{
         btnRun.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-            	if(ins.size()==0){
-            		new JOptionPane().showMessageDialog(null, "Please enter instructions first!");
-            	
-            	}
-            	else{
-	            	frame.dispose();
-	            	new RunGUI(ins, reg, mem);
-            	}
+            	frame.dispose();
+            	new RunGUI(ins, reg, mem);
             }
         });
         
