@@ -50,11 +50,11 @@ public class RunGUI {
         
         cycleScroll.setBounds(378, 39, 358, 450);
         mainPanel.add(cycleScroll);
-        cycleScroll.setViewportView(cycleTable);
+        cycleScroll.add(cycleTable);
 		
         mapScroll.setBounds(10, 39, 358, 350);
         mainPanel.add(mapScroll);
-        mapScroll.setViewportView(mapTable);
+        mapScroll.add(mapTable);
         
         lblPipelineMap.setBounds(160, 11, 79, 17);
         mainPanel.add(lblPipelineMap);
@@ -442,7 +442,7 @@ public class RunGUI {
         }
         
         cycle = 1;
-       
+        
         DefaultTableModel model = new DefaultTableModel(new Object[]{" ", " "}, 0) {
 	  		   @Override
 	  		   public boolean isCellEditable(int row, int column) {
