@@ -7,7 +7,7 @@ public class Register {
 	
 	public Register(String reg){
 		this.reg = reg;
-		this.regValue = "0000 0000 0000 0000";
+		this.regValue = "0000000000000000";
 		this.status = true;
 	}
 

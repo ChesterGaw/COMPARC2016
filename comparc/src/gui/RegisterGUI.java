@@ -66,7 +66,8 @@ public class RegisterGUI {
     	};
     	
         for(int i = 1; i < reg.size(); i++){
-        	model.addRow(new Object[]{reg.get(i).getReg(), reg.get(i).getRegValue()});
+        	String temp = reg.get(i).getRegValue().substring(0, 4) + " " + reg.get(i).getRegValue().substring(4, 8) + " " + reg.get(i).getRegValue().substring(8, 12) + " " + reg.get(i).getRegValue().substring(12, 16);
+        	model.addRow(new Object[]{reg.get(i).getReg(), temp});
         }
         jTable.setModel(model); 
         
@@ -101,7 +102,6 @@ public class RegisterGUI {
         mainPanel.add(btnBack);
         
         editPanel.setVisible(false);
-        
         
         jTable.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent m) {
@@ -156,7 +156,7 @@ public class RegisterGUI {
             	}else if(b1 == false || b2 == false || b3 == false || b4 == false)
             		new JOptionPane().showMessageDialog(null, "Please enter Hex values only!");
             	else{
-	            	String regValue = newRValue1.getText() + " " + newRValue2.getText() + " " + newRValue3.getText() + " " + newRValue4.getText();
+	            	String regValue = newRValue1.getText().toUpperCase() + newRValue2.getText().toUpperCase() + newRValue3.getText().toUpperCase() + newRValue4.getText().toUpperCase();
 	            	reg.get(row + 1).setRegValue(regValue);
 	            	jFrame.dispose();
 	            	new RegisterGUI(ins, reg, mem);

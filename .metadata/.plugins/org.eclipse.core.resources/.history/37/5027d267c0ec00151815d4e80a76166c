@@ -1,0 +1,499 @@
+package gui;
+
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
+import comparc.Instruction;
+import comparc.Memory;
+import comparc.Register;
+
+public class CodeGUI{
+	private JFrame jFrame = new JFrame("Code"); 
+	private JPanel jPanel = new JPanel();
+	private JPanel rTypePanel = new JPanel();
+	private JPanel iType1Panel = new JPanel();
+	private JPanel iType2Panel = new JPanel();
+	private JPanel iType3Panel = new JPanel();
+	private JPanel jTypePanel = new JPanel();
+	private JLabel lblLabel = new JLabel("Label");
+    private JLabel lblIns = new JLabel("Instructions");
+    private JLabel lblIns1 = new JLabel("Instruction");
+    private JLabel lblOpHex = new JLabel("OpCode(Hex)");
+    private JLabel lblRs = new JLabel("Rs");
+    private JLabel lblRd = new JLabel("Rd");
+    private JLabel lblRt = new JLabel("Rt");
+    private JLabel lblImm = new JLabel("Imm");
+    private JLabel lblOffset = new JLabel("Offset");
+    private JLabel lblBase = new JLabel("Base");
+    private JTable jTable = new JTable();
+    private JComboBox cmbIns = new JComboBox();
+    private JComboBox cmbRs; 
+    private JComboBox cmbRt; 
+    private JComboBox cmbRd; 
+    private JComboBox cmbBase; 
+    private JTextField txtLabel = new JTextField();
+    private JTextField txtOffset = new JTextField();
+    private JTextField txtImm = new JTextField();
+    private JButton btnAdd = new JButton("Add");
+    private JButton btnGenerateOpcodehex = new JButton("Generate OpCode(Hex)");
+    private JButton btnBack = new JButton("Back");
+
+    public CodeGUI(ArrayList<Instruction> ins, ArrayList<Register> reg, ArrayList<Memory> mem) {    	
+        JScrollPane scrollPane = new JScrollPane();
+    	
+        jPanel.setPreferredSize (new Dimension(515, 554));
+        jPanel.setLayout (null);
+
+	    jFrame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+	    jFrame.getContentPane().add(jPanel);
+	    jFrame.pack();
+	    jFrame.setVisible (true);
+	    jFrame.setLocationRelativeTo(null);
+        
+        lblIns.setBounds (115, 5, 100, 25);
+        jPanel.add(lblIns);
+        
+        lblOpHex.setBounds (335, 5, 100, 25);
+        jPanel.add(lblOpHex);
+        
+        scrollPane.setViewportView(jTable);
+        scrollPane.setBounds(25, 41, 463, 345);
+        scrollPane.setVisible(true);
+        jTable.setVisible(true);
+        jPanel.add(scrollPane);
+        
+        
+        lblLabel.setBounds(35, 401, 46, 14);
+        jPanel.add(lblLabel);
+
+    	txtLabel.setBounds(25, 426, 86, 20);
+    	txtLabel.setColumns(10);
+        jPanel.add(txtLabel);
+        
+        lblIns1.setBounds(115, 401, 73, 14);
+        jPanel.add(lblIns1);
+        
+        //place instructions here
+        cmbIns.setBounds(115, 426, 73, 20);
+        cmbIns.addItem("SELECT");
+        cmbIns.addItem("DADDU");
+        cmbIns.addItem("DMULU");
+        cmbIns.addItem("DMUHU");
+        cmbIns.addItem("SLT");
+        cmbIns.addItem("SELEQZ");
+        cmbIns.addItem("LD");
+        cmbIns.addItem("SD");
+        cmbIns.addItem("DADDUI");
+        cmbIns.addItem("BEQC");
+        cmbIns.addItem("BC");
+        jPanel.add(cmbIns);
+        
+        btnAdd.setBounds(399, 425, 89, 23);
+        jPanel.add(btnAdd);
+        
+        btnGenerateOpcodehex.setBounds(307, 484, 181, 25);
+        jPanel.add(btnGenerateOpcodehex);
+        
+        btnBack.setBounds(25, 485, 89, 23);
+        jPanel.add(btnBack);
+        
+        ArrayList<Integer> Registers = new ArrayList<Integer>();
+        for(int i = 0; i < 32; i++)
+        	Registers.add(i);
+        
+        
+        cmbRs = new JComboBox(Registers.toArray());
+        cmbRt = new JComboBox(Registers.toArray());
+        cmbRd = new JComboBox(Registers.toArray());
+        cmbBase = new JComboBox(Registers.toArray());
+        
+        rTypePanel.setBounds(198, 385, 181, 72);
+        jPanel.add(rTypePanel);
+        rTypePanel.setLayout(null);
+        
+        iType1Panel.setLayout(null);
+        iType1Panel.setBounds(198, 385, 181, 72);
+        jPanel.add(iType1Panel);
+        
+        iType2Panel.setLayout(null);
+        iType2Panel.setBounds(198, 385, 181, 72);
+        jPanel.add(iType2Panel);
+        
+        iType3Panel.setLayout(null);
+        iType3Panel.setBounds(198, 385, 181, 72);
+        jPanel.add(iType3Panel);
+        
+        jTypePanel.setLayout(null);
+		jTypePanel.setBounds(198, 385, 181, 72);
+		jPanel.add(jTypePanel);
+		
+		
+    	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0) {
+ 		   @Override
+ 		   public boolean isCellEditable(int row, int column) {
+ 		       return false;
+ 		   }
+    	};
+    	
+    	String binary;
+    	String hex;
+        for(int i = 0; i < ins.size(); i++){
+        	binary = "";
+        	hex = "";
+        	binary = Integer.toBinaryString(ins.get(i).getPC());
+            hex = Integer.toHexString(Integer.parseInt(binary, 2));
+            model.addRow(new Object[]{hex.toUpperCase(), ins.get(i).getBinHexStringIns()});
+        }
+        jTable.setModel(model); 
+		
+		rTypePanel.setVisible(false);
+        iType1Panel.setVisible(false);
+        iType2Panel.setVisible(false);
+        iType3Panel.setVisible(false);
+        jTypePanel.setVisible(false);
+       
+
+        cmbIns.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                switch(cmbIns.getSelectedItem().toString()){
+                case "DADDU":  
+                case "DMULU": 
+                case "DMUHU":  
+                case "SLT":	   
+                case "SELEQZ": lblRd.setBounds(10, 16, 20, 14);
+				               rTypePanel.add(lblRd);
+				              
+				               lblRs.setBounds(67, 16, 20, 14);
+				               rTypePanel.add(lblRs);
+				                
+				               lblRt.setBounds(119, 16, 13, 14);
+				               rTypePanel.add(lblRt);
+				               
+				               cmbRd.setBounds(10, 41, 47, 20);
+				               rTypePanel.add(cmbRd);
+				                
+				               cmbRs.setBounds(67, 41, 47, 20);
+				               rTypePanel.add(cmbRs);
+				                
+				               cmbRt.setBounds(124, 41, 47, 20);
+				               rTypePanel.add(cmbRt);
+			                   
+				               rTypePanel.setVisible(true);
+				               iType1Panel.setVisible(false);
+				               iType2Panel.setVisible(false);
+				               iType3Panel.setVisible(false);
+				               jTypePanel.setVisible(false);
+                			   break;
+                
+                case "LD":     
+                case "SD": lblRt.setBounds(10, 16, 13, 14);
+			               iType1Panel.add(lblRt);
+			               
+			               lblOffset.setBounds(67, 16, 47, 14);
+			               iType1Panel.add(lblOffset);
+			               
+			               lblBase.setBounds(124, 16, 47, 14);
+			               iType1Panel.add(lblBase);
+			               
+			               cmbRt.setBounds(10, 41, 47, 20);
+			               iType1Panel.add(cmbRt);
+			               
+			               txtOffset.setColumns(10);
+			               txtOffset.setBounds(67, 41, 47, 20);
+			               iType1Panel.add(txtOffset);
+			               
+			               cmbBase.setBounds(124, 41, 47, 20);
+			               iType1Panel.add(cmbBase);
+			               
+			               rTypePanel.setVisible(false);
+			               iType1Panel.setVisible(true);
+			               iType2Panel.setVisible(false);
+			               iType3Panel.setVisible(false);
+			               jTypePanel.setVisible(false);
+			               
+               			   break;
+       
+                case "DADDUI": lblRt.setBounds(10, 16, 13, 14);
+				               iType2Panel.add(lblRt);
+				               
+				               lblRs.setBounds(67, 16, 20, 14);
+				               iType2Panel.add(lblRs);
+				               
+				               lblImm.setBounds(124, 16, 100, 14);
+				               iType2Panel.add(lblImm);
+				               
+				               cmbRt.setBounds(10, 41, 47, 20);
+				               iType2Panel.add(cmbRt);
+				               
+				               cmbRs.setBounds(67, 41, 47, 20);
+				               iType2Panel.add(cmbRs);
+				               
+				               txtImm.setColumns(10);
+				               txtImm.setBounds(124, 41, 47, 20);
+				               iType2Panel.add(txtImm);
+				               
+				               rTypePanel.setVisible(false);
+				               iType1Panel.setVisible(false);
+				               iType2Panel.setVisible(true);
+				               iType3Panel.setVisible(false);
+				               jTypePanel.setVisible(false);
+				               
+                			   break;
+                
+                case "BEQC": lblRs.setBounds(10, 16, 20, 14);
+			                 iType3Panel.add(lblRs);
+			                 
+			                 lblRt.setBounds(67, 16, 20, 14);
+			                 iType3Panel.add(lblRt);
+			                
+			                 lblOffset.setBounds(124, 16, 47, 14);
+			                 iType3Panel.add(lblOffset);
+			                 
+			                 cmbRs.setBounds(10, 41, 47, 20);
+			                 iType3Panel.add(cmbRs);
+			                
+			                 cmbRt.setBounds(67, 41, 47, 20);
+			                 iType3Panel.add(cmbRt);
+
+			                 txtOffset.setColumns(10);
+			                 txtOffset.setBounds(124, 41, 47, 20);
+			                 iType3Panel.add(txtOffset);
+			                 
+			                 rTypePanel.setVisible(false);
+				             iType1Panel.setVisible(false);
+				             iType2Panel.setVisible(false);
+				             iType3Panel.setVisible(true);
+				             jTypePanel.setVisible(false);
+			                 
+                			 break;
+    			
+                case "BC": lblOffset.setBounds(10, 16, 73, 14);
+			               jTypePanel.add(lblOffset);
+			    
+			               txtOffset.setBounds(10, 41, 161, 20);
+			               jTypePanel.add(txtOffset);
+			               txtOffset.setColumns(10);
+			               
+			               rTypePanel.setVisible(false);
+			               iType1Panel.setVisible(false);
+			               iType2Panel.setVisible(false);
+			               iType3Panel.setVisible(false);
+			               jTypePanel.setVisible(true);
+			               
+                		   break;
+                		   
+                default: rTypePanel.setVisible(false);
+		                 iType1Panel.setVisible(false);
+		                 iType2Panel.setVisible(false);
+		                 iType3Panel.setVisible(false);
+		                 jTypePanel.setVisible(false);
+		                 break;
+                }
+            }
+         });
+        
+        
+        btnAdd.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+            	boolean lablExist = false;
+            	int j = 0;
+            	
+            	if(txtLabel.getText().length() != 0 && txtLabel.getText().charAt(txtLabel.getText().length() - 1) != ':'){
+            		if(txtLabel.getText().length() == 1)
+						new JOptionPane().showMessageDialog(null, "Please input a valid label");
+            		else
+            			new JOptionPane().showMessageDialog(null, "Label is incorrect. Please add a ':' to label");
+            	}else{
+            		if(txtLabel.getText().length() != 0){
+            			for(j = 0; j < ins.size(); j++)
+            				if(txtLabel.getText().equalsIgnoreCase(ins.get(j).getLabel())){
+            					new JOptionPane().showMessageDialog(null, "Label is already existing");
+            					lablExist = true;
+		    			}
+            		}
+            		if(lablExist == false  || txtLabel.getText().length() == 0){
+                    	String pattern = "[0-1][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F]";
+
+                    	Pattern p = Pattern.compile(pattern);
+            			
+			            switch(cmbIns.getSelectedItem().toString()){
+		            		case "DADDU":
+		            		case "DMULU":
+		            		case "DMUHU":
+		            		case "SLT":
+		            		case "SELEQZ": ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), Integer.parseInt(cmbRd.getSelectedItem().toString()), Integer.parseInt(cmbRs.getSelectedItem().toString()), Integer.parseInt(cmbRt.getSelectedItem().toString()), 0, ""));
+		     	            			   txtLabel.setText("");
+		     	            			   cmbIns.setSelectedIndex(0);
+		     	            			   cmbRd.setSelectedIndex(0);
+		     	       					   cmbRs.setSelectedIndex(0);
+		     	            			   cmbRt.setSelectedIndex(0);
+		     	            			   rTypePanel.setVisible(false);
+		     	            			   break;
+		            					   
+		            		case "SD":
+		            		case "LD": Matcher mOffset = p.matcher(txtOffset.getText());
+		            				   boolean bOffset = false;
+		            				   
+		            				   if(mOffset.find())
+		            					   bOffset = true;
+		            				   
+		            				   if(txtOffset.getText().length() != 4){
+		            					   new JOptionPane().showMessageDialog(null, "Please limit input to 4 hex digits!");
+		            				   }else if(bOffset == false){
+		            					   new JOptionPane().showMessageDialog(null, "Please limit hex input from 0000 - 1FFF!");
+		            				   }
+		            				   else{
+			            				   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, 0, Integer.parseInt(cmbRt.getSelectedItem().toString()), Integer.parseInt(cmbBase.getSelectedItem().toString()), txtOffset.getText()));
+			            				   txtLabel.setText("");
+			            				   cmbIns.setSelectedIndex(0);
+			            				   cmbRt.setSelectedIndex(0);
+			            				   cmbBase.setSelectedIndex(0);
+			            				   txtOffset.setText("");
+			            				   iType1Panel.setVisible(false);
+		            				   }break;
+		            		case "DADDUI": Matcher mImm = p.matcher(txtImm.getText());
+		            					   boolean bImm = false;
+		            					   
+		            					   if(mImm.find())
+		            						   bImm = true;
+		            					   
+		            					   if(txtImm.getText().length() != 4){
+					    					   new JOptionPane().showMessageDialog(null, "Please limit input to 4 hex digits!");
+					    				   }else if(bImm == false){
+					    					   new JOptionPane().showMessageDialog(null, "Please limit hex input from 0000 - 1FFF!");
+					    				   }
+					    				   else{
+			            					   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, Integer.parseInt(cmbRs.getSelectedItem().toString()), Integer.parseInt(cmbRt.getSelectedItem().toString()), 0, txtImm.getText()));
+			        						   txtLabel.setText("");
+			        						   cmbIns.setSelectedIndex(0);
+			        						   cmbRs.setSelectedIndex(0);
+			        						   cmbRt.setSelectedIndex(0);
+			        						   txtImm.setText("");
+			        						   iType2Panel.setVisible(false);
+		            					   }break;
+		            		case "BEQC":if(txtOffset.getText().length() == 0){
+				            				 new JOptionPane().showMessageDialog(null, "Offset is empty!");
+				     				    }else{
+				     				    	 ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, Integer.parseInt(cmbRs.getSelectedItem().toString()), Integer.parseInt(cmbRt.getSelectedItem().toString()), 0, txtOffset.getText()));
+			            					 txtLabel.setText("");
+			            					 cmbIns.setSelectedIndex(0);
+			            					 cmbRs.setSelectedIndex(0);
+			            					 cmbRt.setSelectedIndex(0);
+			            					 txtOffset.setText("");
+			  				                 iType3Panel.setVisible(false);
+				     				     }break;
+		            		case "BC": if(txtOffset.getText().length() == 0){
+		            						new JOptionPane().showMessageDialog(null, "Offset is empty!");
+		            				   }else{
+			            				   ins.add(new Instruction(ins.size()* 4, txtLabel.getText(), cmbIns.getSelectedItem().toString(), 0, 0, 0, 0, txtOffset.getText()));
+			            				   txtLabel.setText("");
+			            				   cmbIns.setSelectedIndex(0);
+			            				   txtOffset.setText("");
+			  				               jTypePanel.setVisible(false);
+		            				   }break;
+			            }
+			            String binary = "";
+		            	String hex = "";
+		            	
+		            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction"}, 0) {
+		         		   @Override
+		         		   public boolean isCellEditable(int row, int column) {
+		         		       return false;
+		         		   }
+		            	};
+		            	for(int i = 0; i < ins.size(); i++){
+		                	binary = "";
+		                	hex = "";
+		                	binary = Integer.toBinaryString(ins.get(i).getPC());
+		                    hex = Integer.toHexString(Integer.parseInt(binary, 2));
+		                    model.addRow(new Object[]{hex.toUpperCase(), ins.get(i).getBinHexStringIns()});
+		                }
+		                jTable.setModel(model); 
+            		}	
+            	}	
+            }
+        });
+        
+        btnGenerateOpcodehex.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+            	
+            	int i = 0;
+            	int j = 0;
+            	String temp = "";
+            	for(i = 0; i < ins.size(); i++){
+            		if(ins.get(i).getIns() == "BEQC" || ins.get(i).getIns() == "BC"){
+            			temp = ins.get(i).getOffset() + ":";
+            			for(j = 0; j < ins.size(); j++){
+            				if(temp.equalsIgnoreCase(ins.get(j).getLabel())){
+            					ins.get(i).setBinImm(signExtend((ins.get(j).getPC() - ins.get(i).getPC()) / 4, 26));
+            					j = ins.size() + 1;
+            				}
+            			}
+            		}
+            	}
+            	
+            	String binary = "";
+            	String hex = "";
+            	
+            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction", "OpCode(Hex)"}, 0) {
+	         		   @Override
+	         		   public boolean isCellEditable(int row, int column) {
+	         		       return false;
+	         		   }
+	            };
+	            
+                for(i = 0; i < ins.size(); i++){
+                	binary = "";
+                	hex = "";
+                	binary = Integer.toBinaryString(ins.get(i).getPC());
+                    hex = Integer.toHexString(Integer.parseInt(binary, 2));
+                    model.addRow(new Object[]{hex.toUpperCase(), ins.get(i).getBinHexStringIns(), ins.get(i).toHex()});
+                }
+                jTable.setModel(model);            
+            }
+        });
+        
+        btnBack.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+            	jFrame.dispose();
+            	new MainGUI(ins, reg, mem);
+            }
+        });
+        
+        AutoCompleteDecorator.decorate(this.cmbIns);
+		AutoCompleteDecorator.decorate(this.cmbRs);
+		AutoCompleteDecorator.decorate(this.cmbRt);
+		AutoCompleteDecorator.decorate(this.cmbRd);
+		AutoCompleteDecorator.decorate(this.cmbBase);
+    }
+    
+    private static String signExtend(int value, int bits){
+    	String bin = Integer.toBinaryString(value);
+		int i = 0;
+		int l = bin.length();
+		String sign = "";
+		
+		if(value < 0)
+			sign = "1";
+		else
+			sign = "0";
+		
+		for(i = 0; i < bits - l; i++)
+			bin = sign + bin;
+		
+		return bin;
+    }
+}
