@@ -123,7 +123,7 @@ public class Instruction {
 							this.Imm = "";
 							this.Offset = a;
 							this.Base = "R" + Integer.toString(base);
-							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rt + ", " + this.Offset + "(" + this.Rt + ")");
+							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rt + ", " + this.Offset + "(" + this.Base + ")");
 							break;
 							
 			case "SD":		this.binOpcode = "111111";
@@ -136,7 +136,7 @@ public class Instruction {
 							this.Imm = "";
 							this.Offset = a;
 							this.Base = "R" + Integer.toString(base);
-							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rt + ", " + this.Offset + "(" + this.Rt + ")");
+							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rt + ", " + this.Offset + "(" + this.Base + ")");
 							break;
 							
 			case "DADDUI":	this.binOpcode = "011001";

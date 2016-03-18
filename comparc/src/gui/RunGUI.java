@@ -96,281 +96,282 @@ public class RunGUI {
 
         
         	//PAT
-        	
-        	//MEM
-        	if(cycles.size() - 1 > 2 && cycles.get(cycles.size() - 2).getEXMEM_index() != -1){
-        		ins.get(cycles.get(cycles.size() - 2).getEXMEM_index()).setMEM(clockCycle);
-        		cycles.get(cycles.size() - 1).setMEMWB_index(cycles.get(cycles.size() - 2).getEXMEM_index());
-            	cycles.get(cycles.size() - 1).setMEMWB_IR(cycles.get(cycles.size() - 2).getEXMEM_IR());
-            	cycles.get(cycles.size() - 1).setMEMWB_ALU(cycles.get(cycles.size() - 2).getEXMEM_ALU());
-        		String r = "";
-        		int add = 0;
-            	switch(ins.get(cycles.get(cycles.size() - 2).getEXMEM_index()).getIns()){
-	        		case "LD":	r = cycles.get(cycles.size() - 2).getEXMEM_ALU();
-	        					r = r.substring(12);
-	        					add = hexToDecimal(r);
-	        					if(add >= 16384){
-	        						add %= 8192;
-	        						add += 8192;
-	        					}
-	        					r = Integer.toHexString(add).toUpperCase();
-	        					for(i = 0; i < mem.size(); i++)
-	        						if(r.equals(mem.get(i).getAddress()))
-	        							break;
-	        					r = "";
-	        					for(j = 0; j < 8; j++){
-	        						if(i == mem.size())
-		        						i = 0;
-		        					r = mem.get(i).getData() + r;
-		        					i++;
-	        					}
-	        					cycles.get(cycles.size() - 1).setMEMWB_LMD(r);
-	        					cycles.get(cycles.size() - 1).setMEMWB_range("-");
-	        					break;
-	        					
-	        		case "SD":	r = cycles.get(cycles.size() - 2).getEXMEM_ALU();
-								r = r.substring(12);
-								add = hexToDecimal(r);
-								if(add >= 16384){
-									add %= 8192;
-									add += 8192;
-								}
-								r = Integer.toHexString(add).toUpperCase();
-								String data = cycles.get(cycles.size() - 2).getEXMEM_B();
-								for(i = 0; i < mem.size(); i++)
-									if(r.equals(mem.get(i).getAddress()))
-										break;
-								for(j = 15; j > 0; j -= 2){
-	        						if(i == mem.size())
-		        						i = 0;
-		        					mem.get(i).setData(data.substring(j - 1, j));
-		        					i++;
-	        					}
-								r += " - " + mem.get(i - 1).getAddress();
-								cycles.get(cycles.size() - 1).setMEMWB_range(r);
-	        					cycles.get(cycles.size() - 1).setMEMWB_LMD("-");
-	        					break;
-        			case "DADDU":
-	        		case "DMULU":
-	        		case "DMUHU":
-	        		case "SLT":
-	        		case "SELEQZ":
-	        		case "DADDUI":
-	        		case "BEQC":
-	        		case "BC":	cycles.get(cycles.size() - 1).setMEMWB_LMD("-");
-				        		cycles.get(cycles.size() - 1).setMEMWB_range("-");
-				        		break;
-	        	}
-        	}
-        	
-        	//EX
-        	if(cycles.size() - 1 > 1 && cycles.get(cycles.size() - 2).getIDEX_index() != -1){
-        		int A = 0;
-        		int B = 0;
-        		String Ans = "";
-        		ins.get(cycles.get(cycles.size() - 2).getIDEX_index()).setEX(clockCycle);
-        		cycles.get(cycles.size() - 1).setEXMEM_index(cycles.get(cycles.size() - 2).getIDEX_index());
-            	cycles.get(cycles.size() - 1).setEXMEM_IR(cycles.get(cycles.size() - 2).getIDEX_IR());
-            	cycles.get(cycles.size() - 1).setEXMEM_B(cycles.get(cycles.size() - 2).getIDEX_B());
-            	switch(ins.get(cycles.get(cycles.size() - 2).getIDEX_index()).getIns()){
-	        		case "DADDU":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
-	        						B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
-	        						Ans = Integer.toHexString(A + B);
-	        						if(Ans.length() > 16){
-	        							Ans = Ans.substring(Ans.length() - 16);
-	        						}else{
-	        							for(i = Ans.length(); i < 16; i++)
-	        								Ans = "0" + Ans;
-	        						}
-	        						cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
-	        						cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
-	        						break;
-	        						
-	        		case "DMULU":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
-									B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
-									Ans = Integer.toHexString(A * B);
-									if(Ans.length() > 16){
-										Ans = Ans.substring(Ans.length() - 16);
-									}else{
-										for(i = Ans.length(); i < 16; i++)
-											Ans = "0" + Ans;
-									}
-									cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
-									cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
-									break;
-									
-	        		case "DMUHU":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
-									B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
-									Ans = Integer.toHexString(A * B);
-									if(Ans.length() > 16){
-										Ans = Ans.substring(0, Ans.length() - 17);
-									}
-									for(i = Ans.length(); i < 16; i++)
-										Ans = "0" + Ans;									
-									cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
-									cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
-									break;
-									
-	        		case "SLT":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
-								B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
-								if(A < B)
-									cycles.get(cycles.size() - 1).setEXMEM_ALU("0000000000000001");
-								else
-									cycles.get(cycles.size() - 1).setEXMEM_ALU("0000000000000000");
-								cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
-								break;
-								
-	        		case "SELEQZ":	B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
-				        			if(B == 0)
-				        				cycles.get(cycles.size() - 1).setEXMEM_ALU(cycles.get(cycles.size() - 2).getIDEX_A());
-				        			else
-				        				cycles.get(cycles.size() - 1).setEXMEM_ALU("0000000000000000");
-	        						cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
-				        			break;
-				        			
-	        		case "BEQC":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
-									B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
-									Ans = ins.get(cycles.get(cycles.size() - 2).getIDEX_index()).getOffset() + ":";
-					            	for(i = 0; i < ins.size(); i++)
-					            		if(Ans.equalsIgnoreCase(ins.get(i).getLabel()))
-					            			break;
-					            	Ans = Integer.toHexString(ins.get(i).getPC());
-					            	for(i = Ans.length(); i < 16; i++)
-					            		Ans = "0" + Ans;
-					            	cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
-									if(A == B){
-										cycles.get(cycles.size() - 1).setEXMEM_Cond(true);
-									}else
-										cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
-	        						break;
-	        						
-	        		case "LD":	
-	        		case "SD":	
-	        		case "DADDUI":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
-									B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_Imm());
-									Ans = Integer.toHexString(A + B);
-									for(i = Ans.length(); i < 16; i++)
-					            		Ans = "0" + Ans;
-									cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
-									cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
-									break;
-								
-	        		case "BC":	Ans = ins.get(cycles.get(cycles.size() - 2).getIDEX_index()).getOffset() + ":";
-				            	for(i = 0; i < ins.size(); i++)
-				            		if(Ans.equalsIgnoreCase(ins.get(i).getLabel()))
-				            			break;
-				            	Ans = Integer.toHexString(ins.get(i).getPC());
-				            	for(i = Ans.length(); i < 16; i++)
-				            		Ans = "0" + Ans;
-				            	cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
-				            	cycles.get(cycles.size() - 1).setEXMEM_Cond(true);
-	        					break;
-	        	}
-        	}
-        	
-        	//ID
-        	if(cycles.size() - 1 > 0 && cycles.get(cycles.size() - 2 - nstall).getIFID_index() != -1){
-            	String r = Integer.toString(Integer.parseInt(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getBinA(), 2));
-            	r = "R" + r;
-            	for(i = 0; i < reg.size(); i++)
-            		if(r.equals("R0") || (r.equals(reg.get(i).getReg()) && reg.get(i).getStatus() == true))
-            			break;
-            	if(i == reg.size())
-            		readyA = false;
+        	if((clockCycle >= 1 && clockCycle <= 4) || cycles.get(cycles.size() - 3).getEXMEM_Cond() == false){
+        		//MEM
+            	if(cycles.size() - 1 > 2 && cycles.get(cycles.size() - 2).getEXMEM_index() != -1){
+            		ins.get(cycles.get(cycles.size() - 2).getEXMEM_index()).setMEM(clockCycle);
+            		cycles.get(cycles.size() - 1).setMEMWB_index(cycles.get(cycles.size() - 2).getEXMEM_index());
+                	cycles.get(cycles.size() - 1).setMEMWB_IR(cycles.get(cycles.size() - 2).getEXMEM_IR());
+                	cycles.get(cycles.size() - 1).setMEMWB_ALU(cycles.get(cycles.size() - 2).getEXMEM_ALU());
+            		String r = "";
+            		int add = 0;
+                	switch(ins.get(cycles.get(cycles.size() - 2).getEXMEM_index()).getIns()){
+    	        		case "LD":	r = cycles.get(cycles.size() - 2).getEXMEM_ALU();
+    	        					r = r.substring(12);
+    	        					add = hexToDecimal(r);
+    	        					if(add >= 16384){
+    	        						add %= 8192;
+    	        						add += 8192;
+    	        					}
+    	        					r = Integer.toHexString(add).toUpperCase();
+    	        					for(i = 0; i < mem.size(); i++)
+    	        						if(r.equals(mem.get(i).getAddress()))
+    	        							break;
+    	        					r = "";
+    	        					for(j = 0; j < 8; j++){
+    	        						if(i == mem.size())
+    		        						i = 0;
+    		        					r = mem.get(i).getData() + r;
+    		        					i++;
+    	        					}
+    	        					cycles.get(cycles.size() - 1).setMEMWB_LMD(r);
+    	        					cycles.get(cycles.size() - 1).setMEMWB_range("-");
+    	        					break;
+    	        					
+    	        		case "SD":	r = cycles.get(cycles.size() - 2).getEXMEM_ALU();
+    								r = r.substring(12);
+    								add = hexToDecimal(r);
+    								if(add >= 16384){
+    									add %= 8192;
+    									add += 8192;
+    								}
+    								r = Integer.toHexString(add).toUpperCase();
+    								String data = cycles.get(cycles.size() - 2).getEXMEM_B();
+    								for(i = 0; i < mem.size(); i++)
+    									if(r.equals(mem.get(i).getAddress()))
+    										break;
+    								for(j = 15; j > 0; j -= 2){
+    	        						if(i == mem.size())
+    		        						i = 0;
+    		        					mem.get(i).setData(data.substring(j - 1, j));
+    		        					i++;
+    	        					}
+    								r += " - " + mem.get(i - 1).getAddress();
+    								cycles.get(cycles.size() - 1).setMEMWB_range(r);
+    	        					cycles.get(cycles.size() - 1).setMEMWB_LMD("-");
+    	        					break;
+            			case "DADDU":
+    	        		case "DMULU":
+    	        		case "DMUHU":
+    	        		case "SLT":
+    	        		case "SELEQZ":
+    	        		case "DADDUI":
+    	        		case "BEQC":
+    	        		case "BC":	cycles.get(cycles.size() - 1).setMEMWB_LMD("-");
+    				        		cycles.get(cycles.size() - 1).setMEMWB_range("-");
+    				        		break;
+    	        	}
+            	}
             	
-            	r = Integer.toString(Integer.parseInt(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getBinB(), 2));
-            	r = "R" + r;
-            	for(j = 0; j < reg.size(); j++)
-            		if(r.equals("R0") || (r.equals(reg.get(j).getReg()) && reg.get(j).getStatus() == true))
-            			break;
-            	if(j == reg.size())
-            		readyB = false;
+            	//EX
+            	if(cycles.size() - 1 > 1 && cycles.get(cycles.size() - 2).getIDEX_index() != -1){
+            		int A = 0;
+            		int B = 0;
+            		String Ans = "";
+            		ins.get(cycles.get(cycles.size() - 2).getIDEX_index()).setEX(clockCycle);
+            		cycles.get(cycles.size() - 1).setEXMEM_index(cycles.get(cycles.size() - 2).getIDEX_index());
+                	cycles.get(cycles.size() - 1).setEXMEM_IR(cycles.get(cycles.size() - 2).getIDEX_IR());
+                	cycles.get(cycles.size() - 1).setEXMEM_B(cycles.get(cycles.size() - 2).getIDEX_B());
+                	switch(ins.get(cycles.get(cycles.size() - 2).getIDEX_index()).getIns()){
+    	        		case "DADDU":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
+    	        						B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
+    	        						Ans = Integer.toHexString(A + B);
+    	        						if(Ans.length() > 16){
+    	        							Ans = Ans.substring(Ans.length() - 16);
+    	        						}else{
+    	        							for(i = Ans.length(); i < 16; i++)
+    	        								Ans = "0" + Ans;
+    	        						}
+    	        						cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
+    	        						cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
+    	        						break;
+    	        						
+    	        		case "DMULU":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
+    									B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
+    									Ans = Integer.toHexString(A * B);
+    									if(Ans.length() > 16){
+    										Ans = Ans.substring(Ans.length() - 16);
+    									}else{
+    										for(i = Ans.length(); i < 16; i++)
+    											Ans = "0" + Ans;
+    									}
+    									cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
+    									cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
+    									break;
+    									
+    	        		case "DMUHU":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
+    									B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
+    									Ans = Integer.toHexString(A * B);
+    									if(Ans.length() > 16){
+    										Ans = Ans.substring(0, Ans.length() - 17);
+    									}
+    									for(i = Ans.length(); i < 16; i++)
+    										Ans = "0" + Ans;									
+    									cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
+    									cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
+    									break;
+    									
+    	        		case "SLT":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
+    								B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
+    								if(A < B)
+    									cycles.get(cycles.size() - 1).setEXMEM_ALU("0000000000000001");
+    								else
+    									cycles.get(cycles.size() - 1).setEXMEM_ALU("0000000000000000");
+    								cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
+    								break;
+    								
+    	        		case "SELEQZ":	B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
+    				        			if(B == 0)
+    				        				cycles.get(cycles.size() - 1).setEXMEM_ALU(cycles.get(cycles.size() - 2).getIDEX_A());
+    				        			else
+    				        				cycles.get(cycles.size() - 1).setEXMEM_ALU("0000000000000000");
+    	        						cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
+    				        			break;
+    				        			
+    	        		case "BEQC":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
+    									B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
+    									Ans = ins.get(cycles.get(cycles.size() - 2).getIDEX_index()).getOffset() + ":";
+    					            	for(i = 0; i < ins.size(); i++)
+    					            		if(Ans.equalsIgnoreCase(ins.get(i).getLabel()))
+    					            			break;
+    					            	Ans = Integer.toHexString(ins.get(i).getPC());
+    					            	for(i = Ans.length(); i < 16; i++)
+    					            		Ans = "0" + Ans;
+    					            	cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
+    									if(A == B){
+    										cycles.get(cycles.size() - 1).setEXMEM_Cond(true);
+    									}else
+    										cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
+    	        						break;
+    	        						
+    	        		case "LD":	
+    	        		case "SD":	
+    	        		case "DADDUI":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
+    									B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_Imm());
+    									Ans = Integer.toHexString(A + B);
+    									for(i = Ans.length(); i < 16; i++)
+    					            		Ans = "0" + Ans;
+    									cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
+    									cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
+    									break;
+    								
+    	        		case "BC":	Ans = ins.get(cycles.get(cycles.size() - 2).getIDEX_index()).getOffset() + ":";
+    				            	for(i = 0; i < ins.size(); i++)
+    				            		if(Ans.equalsIgnoreCase(ins.get(i).getLabel()))
+    				            			break;
+    				            	Ans = Integer.toHexString(ins.get(i).getPC());
+    				            	for(i = Ans.length(); i < 16; i++)
+    				            		Ans = "0" + Ans;
+    				            	cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
+    				            	cycles.get(cycles.size() - 1).setEXMEM_Cond(true);
+    	        					break;
+    	        	}
+            	}
             	
-            	switch(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getIns()){
-					case "DADDU":
-					case "DMULU":
-					case "DMUHU":
-					case "SLT":
-					case "SELEQZ":
-					case "BEQC":
-					case "SD":	if(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getIns() != "BEQC" && ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getIns() != "SD"){
-									r = ins.get(cycles.get(cycles.size() - 2).getIFID_index()).getRt();
-									for(i = 0; i < reg.size(); i++)
-										if(r.equals(reg.get(i).getReg()))
-											break;
-									reg.get(i).setStatus(false);
-									if(r.equals(reg.get(0).getReg()))
-										reg.get(i).setStatus(true);
-								}
-								if(readyA && readyB){
-									ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).setID(clockCycle);
-				            		cycles.get(cycles.size() - 1).setIDEX_index(cycles.get(cycles.size() - 2 - nstall).getIFID_index());
-				                	cycles.get(cycles.size() - 1).setIDEX_IR(cycles.get(cycles.size() - 2 - nstall).getIFID_IR());
-				                	cycles.get(cycles.size() - 1).setIDEX_NPC(cycles.get(cycles.size() - 2 - nstall).getIFID_NPC());
-				            		cycles.get(cycles.size() - 1).setIDEX_A(reg.get(i).getRegValue());
-				                	cycles.get(cycles.size() - 1).setIDEX_B(reg.get(j).getRegValue());
-				                	r = ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).toHex();
-				                	r = r.substring(4);
-				                	if(r.charAt(0) >= '0' && r.charAt(0) <= '7')
-				                		for(i = 0; i < 12; i++)
-				                			r = "0" + r;
-				                	else
-				                		r = "F" + r;
-				                	cycles.get(cycles.size() - 1).setIDEX_Imm(r);
-				                	nstall = 0;
-								}else{
-									nstall++;
-								}break;
-								
-					case "LD":
-					case "DADDUI":	r = ins.get(cycles.get(cycles.size() - 2).getMEMWB_index()).getRt();
-									for(i = 0; i < reg.size(); i++)
-										if(r.equals(reg.get(i).getReg()))
-											break;
-									reg.get(i).setStatus(false);
-									if(r.equals(reg.get(0).getReg()))
-										reg.get(i).setStatus(true);
-									if(readyA){
-										ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).setID(clockCycle);
-					            		cycles.get(cycles.size() - 1).setIDEX_index(cycles.get(cycles.size() - 2 - nstall).getIFID_index());
-					                	cycles.get(cycles.size() - 1).setIDEX_IR(cycles.get(cycles.size() - 2 - nstall).getIFID_IR());
-					                	cycles.get(cycles.size() - 1).setIDEX_NPC(cycles.get(cycles.size() - 2 - nstall).getIFID_NPC());
-					                	cycles.get(cycles.size() - 1).setIDEX_A(reg.get(i).getRegValue());
-					                	cycles.get(cycles.size() - 1).setIDEX_B(reg.get(j).getRegValue());
-					                	r = ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).toHex();
-					                	r = r.substring(4);
-					                	if(r.charAt(0) >= '0' && r.charAt(0) <= '7'){
-					                		for(i = 0; i < 12; i++)
-					                			r = "0" + r;
-					                	}else{
-					                		for(i = 0; i < 12; i++)
-					                			r = "F" + r;
-					                	}	
-					                	cycles.get(cycles.size() - 1).setIDEX_Imm(r);
-					                	nstall = 0;
-									}else{
-										nstall++;
-									}break;
-									
-					case "BC":		ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).setID(clockCycle);
-				            		cycles.get(cycles.size() - 1).setIDEX_index(cycles.get(cycles.size() - 2 - nstall).getIFID_index());
-				                	cycles.get(cycles.size() - 1).setIDEX_IR(cycles.get(cycles.size() - 2 - nstall).getIFID_IR());
-				                	cycles.get(cycles.size() - 1).setIDEX_NPC(cycles.get(cycles.size() - 2 - nstall).getIFID_NPC());
-				                	cycles.get(cycles.size() - 1).setIDEX_A(reg.get(i).getRegValue());
-				                	cycles.get(cycles.size() - 1).setIDEX_B(reg.get(j).getRegValue());
-				                	r = ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).toHex();
-				                	r = r.substring(4);
-				                	if(r.charAt(0) >= '0' && r.charAt(0) <= '7')
-				                		for(i = 0; i < 12; i++)
-				                			r = "0" + r;
-				                	else
-				                		r = "F" + r;
-				                	cycles.get(cycles.size() - 1).setIDEX_Imm(r);
-				                	nstall = 0;
-				                	break;
-				}
+            	//ID
+            	if(cycles.size() - 1 > 0 && cycles.get(cycles.size() - 2 - nstall).getIFID_index() != -1){
+                	String r = Integer.toString(Integer.parseInt(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getBinA(), 2));
+                	r = "R" + r;
+                	for(i = 1; i < reg.size(); i++)
+                		if(r.equals("R0") || (r.equals(reg.get(i).getReg()) && reg.get(i).getStatus() == true))
+                			break;
+                	if(i == reg.size())
+                		readyA = false;
+                	
+                	r = Integer.toString(Integer.parseInt(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getBinB(), 2));
+                		if(r.equals("R0") || (r.equals(reg.get(j).getReg()) && reg.get(j).getStatus() == true))
+                			break;
+                	if(j == reg.size())
+                		readyB = false;
+                	
+                	switch(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getIns()){
+    					case "DADDU":
+    					case "DMULU":
+    					case "DMUHU":
+    					case "SLT":
+    					case "SELEQZ":
+    					case "BEQC":
+    					case "SD":	if(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getIns() != "BEQC" && ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getIns() != "SD"){
+    									r = ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getRd();
+    									for(i = 0; i < reg.size(); i++)
+    										if(r.equals(reg.get(i).getReg()))
+    											break;
+    									reg.get(i).setStatus(false);
+    									if(r.equals(reg.get(0).getReg()))
+    										reg.get(i).setStatus(true);
+    								}
+    								if(readyA && readyB){
+    									ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).setID(clockCycle);
+    				            		cycles.get(cycles.size() - 1).setIDEX_index(cycles.get(cycles.size() - 2 - nstall).getIFID_index());
+    				                	cycles.get(cycles.size() - 1).setIDEX_IR(cycles.get(cycles.size() - 2 - nstall).getIFID_IR());
+    				                	cycles.get(cycles.size() - 1).setIDEX_NPC(cycles.get(cycles.size() - 2 - nstall).getIFID_NPC());
+    				            		cycles.get(cycles.size() - 1).setIDEX_A(reg.get(i).getRegValue());
+    				                	cycles.get(cycles.size() - 1).setIDEX_B(reg.get(j).getRegValue());
+    				                	r = ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).toHex();
+    				                	r = r.substring(4);
+    				                	if(r.charAt(0) >= '0' && r.charAt(0) <= '7')
+    				                		for(i = 0; i < 12; i++)
+    				                			r = "0" + r;
+    				                	else
+    				                		r = "F" + r;
+    				                	cycles.get(cycles.size() - 1).setIDEX_Imm(r);
+    				                	nstall = 0;
+    								}else{
+    									nstall++;
+    								}break;
+    								
+    					case "LD":
+    					case "DADDUI":	r = ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getRt();
+    									for(i = 0; i < reg.size(); i++)
+    										if(r.equals(reg.get(i).getReg()))
+    											break;
+    									reg.get(i).setStatus(false);
+    									if(r.equals(reg.get(0).getReg()))
+    										reg.get(i).setStatus(true);
+    									if(readyA){
+    										ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).setID(clockCycle);
+    					            		cycles.get(cycles.size() - 1).setIDEX_index(cycles.get(cycles.size() - 2 - nstall).getIFID_index());
+    					                	cycles.get(cycles.size() - 1).setIDEX_IR(cycles.get(cycles.size() - 2 - nstall).getIFID_IR());
+    					                	cycles.get(cycles.size() - 1).setIDEX_NPC(cycles.get(cycles.size() - 2 - nstall).getIFID_NPC());
+    					                	cycles.get(cycles.size() - 1).setIDEX_A(reg.get(i).getRegValue());
+    					                	cycles.get(cycles.size() - 1).setIDEX_B(reg.get(j).getRegValue());
+    					                	r = ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).toHex();
+    					                	r = r.substring(4);
+    					                	if(r.charAt(0) >= '0' && r.charAt(0) <= '7'){
+    					                		for(i = 0; i < 12; i++)
+    					                			r = "0" + r;
+    					                	}else{
+    					                		for(i = 0; i < 12; i++)
+    					                			r = "F" + r;
+    					                	}	
+    					                	cycles.get(cycles.size() - 1).setIDEX_Imm(r);
+    					                	nstall = 0;
+    									}else{
+    										nstall++;
+    									}break;
+    									
+    					case "BC":		ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).setID(clockCycle);
+    				            		cycles.get(cycles.size() - 1).setIDEX_index(cycles.get(cycles.size() - 2 - nstall).getIFID_index());
+    				                	cycles.get(cycles.size() - 1).setIDEX_IR(cycles.get(cycles.size() - 2 - nstall).getIFID_IR());
+    				                	cycles.get(cycles.size() - 1).setIDEX_NPC(cycles.get(cycles.size() - 2 - nstall).getIFID_NPC());
+    				                	cycles.get(cycles.size() - 1).setIDEX_A(reg.get(i).getRegValue());
+    				                	cycles.get(cycles.size() - 1).setIDEX_B(reg.get(j).getRegValue());
+    				                	r = ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).toHex();
+    				                	r = r.substring(4);
+    				                	if(r.charAt(0) >= '0' && r.charAt(0) <= '7')
+    				                		for(i = 0; i < 12; i++)
+    				                			r = "0" + r;
+    				                	else
+    				                		r = "F" + r;
+    				                	cycles.get(cycles.size() - 1).setIDEX_Imm(r);
+    				                	nstall = 0;
+    				                	break;
+    				}
+            	}
+        	}else{
+        		for(i = 0; i < reg.size(); i++)
+        			reg.get(i).setStatus(true);
         	}
-        	
         	
         	//IF
         	if(nstall == 0){
@@ -406,7 +407,7 @@ public class RunGUI {
 	        							break;
 	        					reg.get(i).setStatus(true);
 	        					reg.get(i).setRegValue(cycles.get(cycles.size() - 2).getMEMWB_LMD());
-	        					cycles.get(cycles.size() - 2).setRn(r + " = " + reg.get(i).getRegValue());
+	        					cycles.get(cycles.size() - 1).setRn(r + " = " + reg.get(i).getRegValue());
 	        					break;
 	        					
 	        		case "DADDU":
@@ -419,7 +420,7 @@ public class RunGUI {
 											break;
 									reg.get(i).setStatus(true);
 									reg.get(i).setRegValue(cycles.get(cycles.size() - 2).getMEMWB_ALU());
-									cycles.get(cycles.size() - 2).setRn(r + " = " + reg.get(i).getRegValue());
+									cycles.get(cycles.size() - 1).setRn(r + " = " + reg.get(i).getRegValue());
 									break;
 									
 	        		case "DADDUI":	r = ins.get(cycles.get(cycles.size() - 2).getMEMWB_index()).getRt();
@@ -428,11 +429,11 @@ public class RunGUI {
 											break;
 									reg.get(i).setStatus(true);
 									reg.get(i).setRegValue(cycles.get(cycles.size() - 2).getMEMWB_ALU());
-									cycles.get(cycles.size() - 2).setRn(r + " = " + reg.get(i).getRegValue());
+									cycles.get(cycles.size() - 1).setRn(r + " = " + reg.get(i).getRegValue());
 									break;
 	        		case "SD":
 	        		case "BC":
-	        		case "BEQC":	cycles.get(cycles.size() - 2).setRn("-");
+	        		case "BEQC":	cycles.get(cycles.size() - 1).setRn("-");
 	        						break;
         		}
         		if((PC - 4) == ins.get(cycles.get(cycles.size() - 2).getMEMWB_index()).getPC())
@@ -475,7 +476,6 @@ public class RunGUI {
 	    model.addRow(new Object[]{"Rn", cycles.get(cycle - 1).getRn()});
 	    cycleTable.setModel(model);
 	    
-	    System.out.println(clockCycle);
         
         btnNextCycle.addActionListener(new ActionListener(){
             @Override
