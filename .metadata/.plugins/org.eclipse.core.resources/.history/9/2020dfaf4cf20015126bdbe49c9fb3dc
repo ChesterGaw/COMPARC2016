@@ -279,8 +279,6 @@ public class RunGUI {
                 		readyA = false;
                 	
                 	r = Integer.toString(Integer.parseInt(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getBinB(), 2));
-                	r = "R" + r;
-                	for(j = 1; j < reg.size(); j++)
                 		if(r.equals("R0") || (r.equals(reg.get(j).getReg()) && reg.get(j).getStatus() == true))
                 			break;
                 	if(j == reg.size())
@@ -668,7 +666,7 @@ public class RunGUI {
             	}
             	
             	model2.setColumnCount(1);
-        	    for(int i = 0; i < cycles.size(); i++){
+        	    for(int i = 0; i < cycle; i++){
         	    	ArrayList<String> data = new ArrayList<String>();
         	    	for(int j = 0; j < ins.size(); j++){
         		    	if(ins.get(j).getIF() == i + 1)

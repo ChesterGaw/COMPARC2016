@@ -668,7 +668,7 @@ public class RunGUI {
             	}
             	
             	model2.setColumnCount(1);
-        	    for(int i = 0; i < cycles.size(); i++){
+        	    for(int i = 0; i < cycle; i++){
         	    	ArrayList<String> data = new ArrayList<String>();
         	    	for(int j = 0; j < ins.size(); j++){
         		    	if(ins.get(j).getIF() == i + 1)

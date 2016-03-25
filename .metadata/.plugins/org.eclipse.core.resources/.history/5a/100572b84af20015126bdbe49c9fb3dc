@@ -279,8 +279,6 @@ public class RunGUI {
                 		readyA = false;
                 	
                 	r = Integer.toString(Integer.parseInt(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getBinB(), 2));
-                	r = "R" + r;
-                	for(j = 1; j < reg.size(); j++)
                 		if(r.equals("R0") || (r.equals(reg.get(j).getReg()) && reg.get(j).getStatus() == true))
                 			break;
                 	if(j == reg.size())
@@ -490,15 +488,18 @@ public class RunGUI {
 	    for(int i = 0; i < cycle; i++){
 	    	ArrayList<String> data = new ArrayList<String>();
 	    	for(int j = 0; j < ins.size(); j++){
-		    	if(ins.get(j).getIF() == i + 1)
+	    		System.out.println(ins.get(j).getIF() + " " + i);
+		    	if(ins.get(j).getIF() == i + 1){
+		    		
 		    		data.add("IF");
-		    	else if(ins.get(j).getID() == i + 1)
+		    	}
+		    	else if(ins.get(j).getID() == i)
 		    		data.add("ID");
-		    	else if(ins.get(j).getEX() == i + 1)
+		    	else if(ins.get(j).getEX() == i)
 		    		data.add("EX");
-		    	else if(ins.get(j).getMEM() == i + 1)
+		    	else if(ins.get(j).getMEM() == i)
 		    		data.add("MEM");
-		    	else if(ins.get(j).getWB() == i + 1)
+		    	else if(ins.get(j).getWB() == i)
 		    		data.add("WB");
 		    	else
 		    		data.add(" ");
@@ -545,28 +546,6 @@ public class RunGUI {
 	        	    model.addRow(new Object[]{"Rn", cycles.get(cycle - 1).getRn()});
 	        	    model.fireTableDataChanged();
 	        	    cycleTable.setModel(model);
-	        	    
-	        	    model2.setColumnCount(1);
-	        	    for(int i = 0; i < cycle; i++){
-	        	    	ArrayList<String> data = new ArrayList<String>();
-	        	    	for(int j = 0; j < ins.size(); j++){
-	        		    	if(ins.get(j).getIF() == i + 1)
-	        		    		data.add("IF");
-	        		    	else if(ins.get(j).getID() == i + 1)
-	        		    		data.add("ID");
-	        		    	else if(ins.get(j).getEX() == i + 1)
-	        		    		data.add("EX");
-	        		    	else if(ins.get(j).getMEM() == i + 1)
-	        		    		data.add("MEM");
-	        		    	else if(ins.get(j).getWB() == i + 1)
-	        		    		data.add("WB");
-	        		    	else
-	        		    		data.add(" ");
-	        		    }
-	        	    	model2.addColumn(Integer.toString(i + 1), data.toArray());
-	        	    }
-	        	    model2.fireTableDataChanged();
-	        	    mapTable.setModel(model2);
             	}
             }
         });
@@ -607,28 +586,6 @@ public class RunGUI {
 	        	    model.addRow(new Object[]{"Rn", cycles.get(cycle - 1).getRn()});
 	        	    model.fireTableDataChanged();
 	        	    cycleTable.setModel(model);
-	        	    
-	        	    model2.setColumnCount(1);
-	        	    for(int i = 0; i < cycle; i++){
-	        	    	ArrayList<String> data = new ArrayList<String>();
-	        	    	for(int j = 0; j < ins.size(); j++){
-	        		    	if(ins.get(j).getIF() == i + 1)
-	        		    		data.add("IF");
-	        		    	else if(ins.get(j).getID() == i + 1)
-	        		    		data.add("ID");
-	        		    	else if(ins.get(j).getEX() == i + 1)
-	        		    		data.add("EX");
-	        		    	else if(ins.get(j).getMEM() == i + 1)
-	        		    		data.add("MEM");
-	        		    	else if(ins.get(j).getWB() == i + 1)
-	        		    		data.add("WB");
-	        		    	else
-	        		    		data.add(" ");
-	        		    }
-	        	    	model2.addColumn(Integer.toString(i + 1), data.toArray());
-	        	    }
-	        	    model2.fireTableDataChanged();
-	        	    mapTable.setModel(model2);
             	}
             }
         });
@@ -666,28 +623,6 @@ public class RunGUI {
             	    model.fireTableDataChanged();
             	    cycleTable.setModel(model);
             	}
-            	
-            	model2.setColumnCount(1);
-        	    for(int i = 0; i < cycles.size(); i++){
-        	    	ArrayList<String> data = new ArrayList<String>();
-        	    	for(int j = 0; j < ins.size(); j++){
-        		    	if(ins.get(j).getIF() == i + 1)
-        		    		data.add("IF");
-        		    	else if(ins.get(j).getID() == i + 1)
-        		    		data.add("ID");
-        		    	else if(ins.get(j).getEX() == i + 1)
-        		    		data.add("EX");
-        		    	else if(ins.get(j).getMEM() == i + 1)
-        		    		data.add("MEM");
-        		    	else if(ins.get(j).getWB() == i + 1)
-        		    		data.add("WB");
-        		    	else
-        		    		data.add(" ");
-        		    }
-        	    	model2.addColumn(Integer.toString(i + 1), data.toArray());
-        	    }
-        	    model2.fireTableDataChanged();
-        	    mapTable.setModel(model2);
             }
         });
         

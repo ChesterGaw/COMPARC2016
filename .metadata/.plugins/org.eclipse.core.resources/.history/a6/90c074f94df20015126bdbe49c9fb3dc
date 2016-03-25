@@ -278,6 +278,8 @@ public class RunGUI {
                 	if(i == reg.size())
                 		readyA = false;
                 	
+                	System.out.print(r + " " + readyA + " ");
+                	
                 	r = Integer.toString(Integer.parseInt(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getBinB(), 2));
                 	r = "R" + r;
                 	for(j = 1; j < reg.size(); j++)
@@ -285,6 +287,7 @@ public class RunGUI {
                 			break;
                 	if(j == reg.size())
                 		readyB = false;
+                	System.out.println(r + " " + readyB);
                 	
                 	switch(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getIns()){
     					case "DADDU":
@@ -668,7 +671,7 @@ public class RunGUI {
             	}
             	
             	model2.setColumnCount(1);
-        	    for(int i = 0; i < cycles.size(); i++){
+        	    for(int i = 0; i < cycle; i++){
         	    	ArrayList<String> data = new ArrayList<String>();
         	    	for(int j = 0; j < ins.size(); j++){
         		    	if(ins.get(j).getIF() == i + 1)
