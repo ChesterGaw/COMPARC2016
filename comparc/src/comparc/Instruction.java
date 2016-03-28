@@ -17,22 +17,22 @@ public class Instruction {
 	private String binB;
 	private String binImm;
 	private	ArrayList<String> binHexStringIns;
-	private int IF;
-	private int ID;
-	private int EX;
-	private int MEM;
-	private int WB;
+//	private int IF;
+//	private int ID;
+//	private int EX;
+//	private int MEM;
+//	private int WB;
 	
 	public Instruction(int PC, String Label, String Ins, int Rd, int Rs, int Rt, int base, String a){
 		this.PC = PC;
 		this.Label = Label;
 		this.Ins = Ins;
 		this.binHexStringIns = new ArrayList<String>();
-		this.IF = 0;
-		this.ID = 0;
-		this.EX = 0;
-		this.MEM = 0;
-		this.WB = 0;
+//		this.IF = 0;
+//		this.ID = 0;
+//		this.EX = 0;
+//		this.MEM = 0;
+//		this.WB = 0;
 		
 		switch(this.Ins){
 			case "DADDU":	this.binOpcode = "000000";
@@ -247,52 +247,52 @@ public class Instruction {
 	
 	public void setBinImm(String imm){
 		if(this.Ins == "BC"){
-			this.binA = imm.substring(0, 5);
-			this.binB = imm.substring(5, 10);
-			this.binImm = imm.substring(10);
+			this.binA = imm.substring(imm.length() - 26, imm.length() - 21);
+			this.binB = imm.substring(imm.length() - 21, imm.length() - 16);
+			this.binImm = imm.substring(imm.length() - 16, imm.length());
 		}else
-			this.binImm = imm.substring(10);
+			this.binImm = imm.substring(imm.length() - 16, imm.length());
 	}
 
-	public int getIF() {
-		return IF;
-	}
-
-	public void setIF(int iF) {
-		IF = iF;
-	}
-
-	public int getID() {
-		return ID;
-	}
-
-	public void setID(int iD) {
-		ID = iD;
-	}
-
-	public int getEX() {
-		return EX;
-	}
-
-	public void setEX(int eX) {
-		EX = eX;
-	}
-
-	public int getMEM() {
-		return MEM;
-	}
-
-	public void setMEM(int mEM) {
-		MEM = mEM;
-	}
-
-	public int getWB() {
-		return WB;
-	}
-
-	public void setWB(int wB) {
-		WB = wB;
-	}
+//	public int getIF() {
+//		return IF;
+//	}
+//
+//	public void setIF(int iF) {
+//		IF = iF;
+//	}
+//
+//	public int getID() {
+//		return ID;
+//	}
+//
+//	public void setID(int iD) {
+//		ID = iD;
+//	}
+//
+//	public int getEX() {
+//		return EX;
+//	}
+//
+//	public void setEX(int eX) {
+//		EX = eX;
+//	}
+//
+//	public int getMEM() {
+//		return MEM;
+//	}
+//
+//	public void setMEM(int mEM) {
+//		MEM = mEM;
+//	}
+//
+//	public int getWB() {
+//		return WB;
+//	}
+//
+//	public void setWB(int wB) {
+//		WB = wB;
+//	}
 	
 	public String getBinA(){
 		return binA;
