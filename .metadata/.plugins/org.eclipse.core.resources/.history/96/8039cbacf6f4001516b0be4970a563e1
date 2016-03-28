@@ -1,0 +1,310 @@
+package comparc;
+
+import java.util.ArrayList;
+
+public class Instruction {
+	private int PC;
+	private String Label;
+	private String Ins;
+	private String Rd;
+	private String Rs;
+	private String Rt;
+	private String Imm;
+	private String Offset;
+	private String Base;
+	private String binOpcode;
+	private String binA;
+	private String binB;
+	private String binImm;
+	private	ArrayList<String> binHexStringIns;
+//	private int IF;
+//	private int ID;
+//	private int EX;
+//	private int MEM;
+//	private int WB;
+	
+	public Instruction(int PC, String Label, String Ins, int Rd, int Rs, int Rt, int base, String a){
+		this.PC = PC;
+		this.Label = Label;
+		this.Ins = Ins;
+		this.binHexStringIns = new ArrayList<String>();
+//		this.IF = 0;
+//		this.ID = 0;
+//		this.EX = 0;
+//		this.MEM = 0;
+//		this.WB = 0;
+		
+		switch(this.Ins){
+			case "DADDU":	this.binOpcode = "000000";
+							this.binImm = intToBin(Rd, 5) + "00000101101";
+							this.binA = intToBin(Rs, 5);
+							this.binB = intToBin(Rt, 5);
+							this.Rd = "R" + Integer.toString(Rd);
+							this.Rs = "R" + Integer.toString(Rs);
+							this.Rt = "R" + Integer.toString(Rt);
+							this.Imm = "";
+							this.Offset = "";
+							this.Base = "";
+							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rd + ", " + this.Rs + ", " + this.Rt);
+							break;
+							
+			case "DMULU":	this.binOpcode = "000000";
+							this.binImm = intToBin(Rd, 5) + "00010011101";
+							this.binA = intToBin(Rs, 5);
+							this.binB = intToBin(Rt, 5);
+							this.Rd = "R" + Integer.toString(Rd);
+							this.Rs = "R" + Integer.toString(Rs);
+							this.Rt = "R" + Integer.toString(Rt);
+							this.Imm = "";
+							this.Offset = "";
+							this.Base = "";
+							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rd + ", " + this.Rs + ", " + this.Rt);
+							break;
+							
+			case "DMUHU":	this.binOpcode = "000000";
+							this.binImm = intToBin(Rd, 5) + "00011011101";
+							this.binA = intToBin(Rs, 5);
+							this.binB = intToBin(Rt, 5);
+							this.Rd = "R" + Integer.toString(Rd);
+							this.Rs = "R" + Integer.toString(Rs);
+							this.Rt = "R" + Integer.toString(Rt);
+							this.Imm = "";
+							this.Offset = "";
+							this.Base = "";
+							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rd + ", " + this.Rs + ", " + this.Rt);
+							break;
+							
+			case "SLT":		this.binOpcode = "000000";
+							this.binImm = intToBin(Rd, 5) + "00000101010";
+							this.binA = intToBin(Rs, 5);
+							this.binB = intToBin(Rt, 5);
+							this.Rd = "R" + Integer.toString(Rd);
+							this.Rs = "R" + Integer.toString(Rs);
+							this.Rt = "R" + Integer.toString(Rt);
+							this.Imm = "";
+							this.Offset = "";
+							this.Base = "";
+							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rd + ", " + this.Rs + ", " + this.Rt);
+							break;
+							
+			case "SELEQZ":	this.binOpcode = "000000";
+							this.binImm = intToBin(Rd, 5) + "00000110101";
+							this.binA = intToBin(Rs, 5);
+							this.binB = intToBin(Rt, 5);
+							this.Rd = "R" + Integer.toString(Rd);
+							this.Rs = "R" + Integer.toString(Rs);
+							this.Rt = "R" + Integer.toString(Rt);
+							this.Imm = "";
+							this.Offset = "";
+							this.Base = "";
+							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rd + ", " + this.Rs + ", " + this.Rt);
+							break;
+							
+			case "BEQC":	this.binOpcode = "001000";
+							this.binA = intToBin(Rs, 5);
+							this.binB = intToBin(Rt, 5);
+							this.binImm = "";
+							this.Rd = "";
+							this.Rs = "R" + Integer.toString(Rs);
+							this.Rt = "R" + Integer.toString(Rt);
+							this.Imm = "";
+							this.Offset = a;
+							this.Base = "";
+							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rs + ", " + this.Rt + ", " + this.Offset);
+							break;
+							
+			case "LD":		this.binOpcode = "110111";
+							this.binB = intToBin(Rt, 5);
+							this.binImm = intToBin(Character.getNumericValue(a.charAt(0)), 4) + intToBin(Character.getNumericValue(a.charAt(1)), 4) + intToBin(Character.getNumericValue(a.charAt(2)), 4) + intToBin(Character.getNumericValue(a.charAt(3)), 4);
+							this.binA = intToBin(base, 5);
+							this.Rd = "";
+							this.Rs = "";
+							this.Rt = "R" + Integer.toString(Rt);
+							this.Imm = "";
+							this.Offset = a;
+							this.Base = "R" + Integer.toString(base);
+							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rt + ", " + this.Offset + "(" + this.Base + ")");
+							break;
+							
+			case "SD":		this.binOpcode = "111111";
+							this.binB = intToBin(Rt, 5);
+							this.binImm = intToBin(Character.getNumericValue(a.charAt(0)), 4) + intToBin(Character.getNumericValue(a.charAt(1)), 4) + intToBin(Character.getNumericValue(a.charAt(2)), 4) + intToBin(Character.getNumericValue(a.charAt(3)), 4);
+							this.binA = intToBin(base, 5);
+							this.Rd = "";
+							this.Rs = "";
+							this.Rt = "R" + Integer.toString(Rt);
+							this.Imm = "";
+							this.Offset = a;
+							this.Base = "R" + Integer.toString(base);
+							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rt + ", " + this.Offset + "(" + this.Base + ")");
+							break;
+							
+			case "DADDUI":	this.binOpcode = "011001";
+							this.binB = intToBin(Rt, 5);
+							this.binA = intToBin(Rs, 5);
+							this.binImm = intToBin(Character.getNumericValue(a.charAt(0)), 4) + intToBin(Character.getNumericValue(a.charAt(1)), 4) + intToBin(Character.getNumericValue(a.charAt(2)), 4) + intToBin(Character.getNumericValue(a.charAt(3)), 4);
+							this.Rd = "";
+							this.Rs = "R" + Integer.toString(Rs);
+							this.Rt = "R" + Integer.toString(Rt);
+							this.Imm = a;
+							this.Offset = "";
+							this.Base = "";
+							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Rt + ", " + this.Rs + ", #" + this.Imm);
+							
+							break;
+							
+			case "BC": 		this.binOpcode = "110010";
+							this.binA = "";
+							this.binB = "";
+							this.binImm = "";
+							this.Rd = "";
+							this.Rs = "";
+							this.Rt = "";
+							this.Imm = "";
+							this.Offset = a;
+							this.Base = "";
+							this.binHexStringIns.add(this.Label + " " + this.Ins + " " + this.Offset);
+							break;
+		}
+	}
+	
+	public String toString(){
+		return binOpcode + " | " + binA + " | " + binB + " | " + binImm;
+	}
+	
+	public String toHex(){
+		String bin = binOpcode + binA + binB + binImm;
+		String hex = "";
+		String temp = "";
+		
+		System.out.println(bin);
+		
+		for(int i = 0; i < bin.length(); i += 4){
+			temp += bin.charAt(i);
+			temp += bin.charAt(i + 1);
+			temp += bin.charAt(i + 2);
+			temp += bin.charAt(i + 3);
+			
+			switch(temp){
+				case "0000": hex += '0'; break;
+				case "0001": hex += '1'; break;
+				case "0010": hex += '2'; break;
+				case "0011": hex += '3'; break;
+				case "0100": hex += '4'; break;
+				case "0101": hex += '5'; break;
+				case "0110": hex += '6'; break;
+				case "0111": hex += '7'; break;
+				case "1000": hex += '8'; break;
+				case "1001": hex += '9'; break;
+				case "1010": hex += 'A'; break;
+				case "1011": hex += 'B'; break;
+				case "1100": hex += 'C'; break;
+				case "1101": hex += 'D'; break;
+				case "1110": hex += 'E'; break;
+				case "1111": hex += 'F'; break;
+			}
+			
+			temp = "";
+		}
+		return hex;
+	}
+	
+	private static String intToBin(int reg, int bits){
+		String bin = Integer.toBinaryString(reg);
+		int i = 0;
+		int l = bin.length();
+		
+		for(i = 0; i < bits - l; i++)
+			bin = '0' + bin;
+		
+		return bin;
+	}
+	
+	public ArrayList<String> getBinHexStringIns(){
+		return binHexStringIns;
+	}
+	
+	public int getPC(){
+		return this.PC;
+	}
+	
+	public String getIns(){
+		return this.Ins;
+	}
+	
+	public String getOffset(){
+		return this.Offset;
+	}
+	
+	public String getLabel(){
+		return this.Label;
+	}
+	public String getRt(){
+		return this.Rt;
+	}
+	
+	public String getRd(){
+		return this.Rd;
+	}
+	
+	public void setBinImm(String imm){
+		if(this.Ins == "BC"){
+			this.binA = imm.substring(0, 5);
+			this.binB = imm.substring(5, 10);
+			this.binImm = imm.substring(10);
+		}else
+			this.binImm = imm.substring(10);
+	}
+
+//	public int getIF() {
+//		return IF;
+//	}
+//
+//	public void setIF(int iF) {
+//		IF = iF;
+//	}
+//
+//	public int getID() {
+//		return ID;
+//	}
+//
+//	public void setID(int iD) {
+//		ID = iD;
+//	}
+//
+//	public int getEX() {
+//		return EX;
+//	}
+//
+//	public void setEX(int eX) {
+//		EX = eX;
+//	}
+//
+//	public int getMEM() {
+//		return MEM;
+//	}
+//
+//	public void setMEM(int mEM) {
+//		MEM = mEM;
+//	}
+//
+//	public int getWB() {
+//		return WB;
+//	}
+//
+//	public void setWB(int wB) {
+//		WB = wB;
+//	}
+	
+	public String getBinA(){
+		return binA;
+	}
+	
+	public String getBinB(){
+		return binB;
+	}
+	
+	public String getBinImm(){
+		return binImm;
+	}
+}

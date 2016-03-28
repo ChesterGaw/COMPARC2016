@@ -21,7 +21,9 @@ public class Cycle {
 	private String MEMWB_range;
 	private String MEMWB_IR;
 	private String MEMWB_ALU;
+	private int WB_index;
 	private String Rn;
+	
 	
 	public Cycle(){
 		cycleNum = 0;
@@ -44,6 +46,7 @@ public class Cycle {
 		MEMWB_range = "";
 		MEMWB_IR = "";
 		MEMWB_ALU = "";
+		WB_index = -1;
 		Rn = "";
 	}
 	
@@ -213,5 +216,13 @@ public class Cycle {
 
 	public void setIDEX_NPC(String iDEX_NPC) {
 		IDEX_NPC = iDEX_NPC;
+	}
+
+	public int getWB_index() {
+		return WB_index;
+	}
+
+	public void setWB_index(int wB_index) {
+		WB_index = wB_index;
 	}
 }
