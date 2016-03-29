@@ -135,7 +135,7 @@ public class MemoryGUI {
             		bNewMemVal = true;
             	
             	if(txtNewMemoryValue.getText().length() != 2)
-            		new JOptionPane().showMessageDialog(null, "Please input 2 characters!");
+            		new JOptionPane().showMessageDialog(null, "Please input 2 Hex digits!");
             	else if(bNewMemVal == false){
             		new JOptionPane().showMessageDialog(null, "Please enter Hex Values only!");
             	}

@@ -3,6 +3,7 @@ package gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,15 +45,18 @@ public class CodeGUI{
     private JTextField txtOffset = new JTextField();
     private JTextField txtImm = new JTextField();
     private JButton btnAdd = new JButton("Add");
-    private JButton btnGenerateOpcodehex = new JButton("Generate OpCode(Hex)");
+    private JButton btnApply = new JButton("Apply");
     private JButton btnBack = new JButton("Back");
+    
+    private boolean clicked = false;
 
     public CodeGUI(ArrayList<Instruction> ins, ArrayList<Register> reg, ArrayList<Memory> mem) {    	
         JScrollPane scrollPane = new JScrollPane();
     	
         mainPanel.setPreferredSize (new Dimension(515, 554));
         mainPanel.setLayout (null);
-
+        
+        jFrame.getRootPane().setDefaultButton(btnAdd);
 	    jFrame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
 	    jFrame.getContentPane().add(mainPanel);
 	    jFrame.pack();
@@ -82,6 +86,7 @@ public class CodeGUI{
         lblIns1.setBounds(115, 401, 73, 14);
         mainPanel.add(lblIns1);
         
+        
         //place instructions here
         cmbIns.setBounds(115, 426, 73, 20);
         cmbIns.addItem("SELECT");
@@ -100,8 +105,8 @@ public class CodeGUI{
         btnAdd.setBounds(399, 425, 89, 23);
         mainPanel.add(btnAdd);
         
-        btnGenerateOpcodehex.setBounds(307, 484, 181, 25);
-        mainPanel.add(btnGenerateOpcodehex);
+        btnApply.setBounds(307, 484, 181, 25);
+        mainPanel.add(btnApply);
         
         btnBack.setBounds(25, 485, 89, 23);
         mainPanel.add(btnBack);
@@ -428,52 +433,78 @@ public class CodeGUI{
             }
         });
         
-        btnGenerateOpcodehex.addActionListener(new ActionListener(){
+        btnApply.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
+            	clicked = true;
             	
-            	int i = 0;
-            	int j = 0;
-            	String temp = "";
-            	for(i = 0; i < ins.size(); i++){
-            		if(ins.get(i).getIns() == "BEQC" || ins.get(i).getIns() == "BC"){
-            			temp = ins.get(i).getOffset() + ":";
-            			for(j = 0; j < ins.size(); j++){
-            				if(temp.equalsIgnoreCase(ins.get(j).getLabel())){
-            					ins.get(i).setBinImm(signExtend(((ins.get(j).getPC() - ins.get(i).getPC()) / 4) - 1, 26));
-            					j = ins.size() + 1;
-            				}
-            			}
-            		}
+            	if(ins.isEmpty()){
+            		clicked = false;
+            		JOptionPane.showMessageDialog(null, "Please input code first!");
+            	}else{
+	            	ArrayList<Integer> iFoundLabel = new ArrayList<Integer>();
+	            	int counter = 0;
+	            	int i = 0;
+	            	int j = 0;
+	            	String temp = "";
+	            	for(i = 0; i < ins.size(); i++){
+	            		if(ins.get(i).getIns() == "BEQC" || ins.get(i).getIns() == "BC"){
+	            			temp = ins.get(i).getOffset() + ":";
+	            			for(j = 0; j < ins.size(); j++){
+	            				if(temp.equalsIgnoreCase(ins.get(j).getLabel())){
+	            					ins.get(i).setBinImm(signExtend(((ins.get(j).getPC() - ins.get(i).getPC()) / 4) - 1, 26));
+	            					j = ins.size() + 1;
+	            				}
+	            				if(ins.get(i).getOffset().concat(":").equals(ins.get(j).getLabel()))
+	            					counter++;
+	            			}
+	            			iFoundLabel.add(counter);
+	        				counter = 0;
+	            		}
+	            	}
+	            	
+	            	for(i =0; i < iFoundLabel.size(); i++)
+	            		if(iFoundLabel.get(i) == 0){
+	            			JOptionPane.showMessageDialog(null, "Offset on some branches are not found!");
+	            			ins.clear();
+	            			jFrame.dispose();
+	            			new CodeGUI(ins, reg, mem);
+	            			break;
+	        			}
+	            	
+	            	String binary = "";
+	            	String hex = "";
+	            	
+	            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction", "OpCode(Hex)"}, 0) {
+		         		   @Override
+		         		   public boolean isCellEditable(int row, int column) {
+		         		       return false;
+		         		   }
+		            };
+		            
+	                for(i = 0; i < ins.size(); i++){
+	                	binary = "";
+	                	hex = "";
+	                	binary = Integer.toBinaryString(ins.get(i).getPC());
+	                    hex = Integer.toHexString(Integer.parseInt(binary, 2));
+	                    model.addRow(new Object[]{hex.toUpperCase(), ins.get(i).getBinHexStringIns(), ins.get(i).toHex()});
+	                }
+	                jTable.setModel(model);
             	}
-            	
-            	String binary = "";
-            	String hex = "";
-            	
-            	DefaultTableModel model = new DefaultTableModel(new Object[]{"PC", "Instruction", "OpCode(Hex)"}, 0) {
-	         		   @Override
-	         		   public boolean isCellEditable(int row, int column) {
-	         		       return false;
-	         		   }
-	            };
-	            
-                for(i = 0; i < ins.size(); i++){
-                	binary = "";
-                	hex = "";
-                	binary = Integer.toBinaryString(ins.get(i).getPC());
-                    hex = Integer.toHexString(Integer.parseInt(binary, 2));
-                    model.addRow(new Object[]{hex.toUpperCase(), ins.get(i).getBinHexStringIns(), ins.get(i).toHex()});
-                }
-                jTable.setModel(model);            
             }
         });
         
         btnBack.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-            	jFrame.dispose();
-            	new MainGUI(ins, reg, mem);
-            }
+            	if(ins.isEmpty() || clicked == true){
+	            	jFrame.dispose();
+	            	new MainGUI(ins, reg, mem);
+            	}
+            	else if(clicked == false)
+            		JOptionPane.showMessageDialog(null, "Please click Apply Button first!");
+            	
+        	}
         });
         
         AutoCompleteDecorator.decorate(this.cmbIns);
