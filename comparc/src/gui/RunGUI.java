@@ -49,15 +49,12 @@ public class RunGUI {
 		
 		mainPanel.setPreferredSize (new Dimension(750, 500));
         mainPanel.setLayout (null);
-        cycleScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        cycleScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         
         cycleScroll.setBounds(378, 39, 358, 450);
         mainPanel.add(cycleScroll);
         cycleScroll.setViewportView(cycleTable);
-        mapScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        mapScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		
+        mapTable.setAutoResizeMode(cycleTable.AUTO_RESIZE_OFF);
         mapScroll.setBounds(10, 39, 358, 350);
         mainPanel.add(mapScroll);
         mapScroll.setViewportView(mapTable);
@@ -528,7 +525,7 @@ public class RunGUI {
 	    }
 	    
 	    mapTable.setModel(model2);
-	    
+	    mapTable.getColumnModel().getColumn(0).setPreferredWidth(200);
         
         btnNextCycle.addActionListener(new ActionListener(){
             @Override
@@ -594,6 +591,7 @@ public class RunGUI {
 	        	    }
 	        	    model2.fireTableDataChanged();
 	        	    mapTable.setModel(model2);
+	        	    mapTable.getColumnModel().getColumn(0).setPreferredWidth(200);
             	}
             }
         });
@@ -662,6 +660,7 @@ public class RunGUI {
 	        	    }
 	        	    model2.fireTableDataChanged();
 	        	    mapTable.setModel(model2);
+	        	    mapTable.getColumnModel().getColumn(0).setPreferredWidth(200);
             	}
             }
         });
@@ -727,6 +726,7 @@ public class RunGUI {
         	    }
         	    model2.fireTableDataChanged();
         	    mapTable.setModel(model2);
+        	    mapTable.getColumnModel().getColumn(0).setPreferredWidth(200);
             }
         });
         
