@@ -20,6 +20,7 @@ import javax.swing.JButton;
 import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.ScrollPaneConstants;
 
 public class RunGUI {
 	private JFrame jFrame = new JFrame("Run");
@@ -48,10 +49,14 @@ public class RunGUI {
 		
 		mainPanel.setPreferredSize (new Dimension(750, 500));
         mainPanel.setLayout (null);
+        cycleScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        cycleScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         
         cycleScroll.setBounds(378, 39, 358, 450);
         mainPanel.add(cycleScroll);
         cycleScroll.setViewportView(cycleTable);
+        mapScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        mapScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		
         mapScroll.setBounds(10, 39, 358, 350);
         mainPanel.add(mapScroll);
@@ -201,10 +206,11 @@ public class RunGUI {
     									B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
     									Ans = Integer.toHexString(A * B);
     									if(Ans.length() > 16){
-    										Ans = Ans.substring(0, Ans.length() - 17);
-    									}
-    									for(i = Ans.length(); i < 16; i++)
-    										Ans = "0" + Ans;									
+    										Ans = Ans.substring(0, Ans.length() - 16);
+    										for(i = Ans.length(); i < 16; i++)
+        										Ans = "0" + Ans;
+    									}else if(Ans.length() <= 16)
+    										Ans = "0000000000000000";		
     									cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans.toUpperCase());
     									cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
     									break;
@@ -295,16 +301,16 @@ public class RunGUI {
     					case "SLT":
     					case "SELEQZ":
     					case "BEQC":
-    					case "SD":	if(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getIns() != "BEQC" && ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getIns() != "SD"){
-    									r = ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getRd();
-    									for(i = 0; i < reg.size(); i++)
-    										if(r.equals(reg.get(i).getReg()))
-    											break;
-    									reg.get(i).setStatus(false);
-    									if(r.equals(reg.get(0).getReg()))
-    										reg.get(i).setStatus(true);
-    								}
-    								if(readyA && readyB){
+    					case "SD":	if(readyA && readyB){
+    									if(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getIns() != "BEQC" && ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getIns() != "SD"){
+        									r = ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getRd();
+        									int k = 0;
+        									for(k = 0; k < reg.size(); k++)
+        										if(r.equals(reg.get(k).getReg()))
+        											break;
+        									reg.get(k).setStatus(false);
+        									reg.get(0).setStatus(true);
+        								}
     				            		cycles.get(cycles.size() - 1).setIDEX_index(cycles.get(cycles.size() - 2 - nstall).getIFID_index());
     				                	cycles.get(cycles.size() - 1).setIDEX_IR(cycles.get(cycles.size() - 2 - nstall).getIFID_IR());
     				                	cycles.get(cycles.size() - 1).setIDEX_NPC(cycles.get(cycles.size() - 2 - nstall).getIFID_NPC());
@@ -324,9 +330,9 @@ public class RunGUI {
     								}break;
     								
     					case "LD":
-    					case "DADDUI":	reg.get(j).setStatus(false);
-    									reg.get(0).setStatus(true);
-    									if(readyA){
+    					case "DADDUI":	if(readyA){
+    										reg.get(j).setStatus(false);
+        									reg.get(0).setStatus(true);
     					            		cycles.get(cycles.size() - 1).setIDEX_index(cycles.get(cycles.size() - 2 - nstall).getIFID_index());
     					                	cycles.get(cycles.size() - 1).setIDEX_IR(cycles.get(cycles.size() - 2 - nstall).getIFID_IR());
     					                	cycles.get(cycles.size() - 1).setIDEX_NPC(cycles.get(cycles.size() - 2 - nstall).getIFID_NPC());
@@ -387,8 +393,19 @@ public class RunGUI {
                 			npc = "0" + npc;
                 		cycles.get(cycles.size() - 1).setIFID_NPC(npc);
                 	}
-        		}
-            	
+        		}else if(cycles.size() - 1 > 2 && cycles.get(cycles.size() - 2).getEXMEM_Cond() == true && (ins.get(cycles.get(cycles.size() - 2).getEXMEM_index()).getIns() == "BEQC" || ins.get(cycles.get(cycles.size() - 2).getEXMEM_index()).getIns() == "BC")){
+//        			cycles.get(cycles.size() - 1).setIFID_index(i);
+//                	cycles.get(cycles.size() - 1).setIFID_IR(ins.get(i).toHex());
+//            		cycles.get(cycles.size() - 1).setIFID_NPC(cycles.get(cycles.size() - 2).getEXMEM_ALU());
+            		nstall = 0;
+                	PC = hexToDecimal(cycles.get(cycles.size() - 2).getEXMEM_ALU());
+            	}
+        	}else if(cycles.size() - 1 > 2 && cycles.get(cycles.size() - 2).getEXMEM_Cond() == true && (ins.get(cycles.get(cycles.size() - 2).getEXMEM_index()).getIns() == "BEQC" || ins.get(cycles.get(cycles.size() - 2).getEXMEM_index()).getIns() == "BC")){
+//    			cycles.get(cycles.size() - 1).setIFID_index(i);
+//            	cycles.get(cycles.size() - 1).setIFID_IR(ins.get(i).toHex());
+//        		cycles.get(cycles.size() - 1).setIFID_NPC(cycles.get(cycles.size() - 2).getEXMEM_ALU());
+        		nstall = 0;
+            	PC = hexToDecimal(cycles.get(cycles.size() - 2).getEXMEM_ALU());
         	}
         	
         	//WB
@@ -439,7 +456,9 @@ public class RunGUI {
         	}
         	
         	clockCycle++;
-        }
+        	if(clockCycle == 1000)
+        		x = false;
+        }	
         
         cycle = 1;
         lblCycleNumber.setText(Integer.toString(cycle));

@@ -20,6 +20,7 @@ import javax.swing.JButton;
 import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.ScrollPaneConstants;
 
 public class RunGUI {
 	private JFrame jFrame = new JFrame("Run");
@@ -48,10 +49,14 @@ public class RunGUI {
 		
 		mainPanel.setPreferredSize (new Dimension(750, 500));
         mainPanel.setLayout (null);
+        cycleScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        cycleScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         
         cycleScroll.setBounds(378, 39, 358, 450);
         mainPanel.add(cycleScroll);
         cycleScroll.setViewportView(cycleTable);
+        mapScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        mapScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		
         mapScroll.setBounds(10, 39, 358, 350);
         mainPanel.add(mapScroll);
@@ -93,13 +98,13 @@ public class RunGUI {
         	int j = 0;
         	boolean readyA = true;
         	boolean readyB = true;
+        	System.out.println(clockCycle);
 
         
         	//PAT
         	if((clockCycle >= 1 && clockCycle <= 4) || cycles.get(cycles.size() - 3).getEXMEM_Cond() == false){
         		//MEM
             	if(cycles.size() - 1 > 2 && cycles.get(cycles.size() - 2).getEXMEM_index() != -1){
-            		ins.get(cycles.get(cycles.size() - 2).getEXMEM_index()).setMEM(clockCycle);
             		cycles.get(cycles.size() - 1).setMEMWB_index(cycles.get(cycles.size() - 2).getEXMEM_index());
                 	cycles.get(cycles.size() - 1).setMEMWB_IR(cycles.get(cycles.size() - 2).getEXMEM_IR());
                 	cycles.get(cycles.size() - 1).setMEMWB_ALU(cycles.get(cycles.size() - 2).getEXMEM_ALU());
@@ -143,7 +148,7 @@ public class RunGUI {
     								for(j = 15; j > 0; j -= 2){
     	        						if(i == mem.size())
     		        						i = 0;
-    		        					mem.get(i).setData(data.substring(j - 1, j));
+    		        					mem.get(i).setData(data.substring(j - 1, j + 1));
     		        					i++;
     	        					}
     								r += " - " + mem.get(i - 1).getAddress();
@@ -168,7 +173,6 @@ public class RunGUI {
             		int A = 0;
             		int B = 0;
             		String Ans = "";
-            		ins.get(cycles.get(cycles.size() - 2).getIDEX_index()).setEX(clockCycle);
             		cycles.get(cycles.size() - 1).setEXMEM_index(cycles.get(cycles.size() - 2).getIDEX_index());
                 	cycles.get(cycles.size() - 1).setEXMEM_IR(cycles.get(cycles.size() - 2).getIDEX_IR());
                 	cycles.get(cycles.size() - 1).setEXMEM_B(cycles.get(cycles.size() - 2).getIDEX_B());
@@ -182,7 +186,7 @@ public class RunGUI {
     	        							for(i = Ans.length(); i < 16; i++)
     	        								Ans = "0" + Ans;
     	        						}
-    	        						cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
+    	        						cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans.toUpperCase());
     	        						cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
     	        						break;
     	        						
@@ -195,7 +199,7 @@ public class RunGUI {
     										for(i = Ans.length(); i < 16; i++)
     											Ans = "0" + Ans;
     									}
-    									cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
+    									cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans.toUpperCase());
     									cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
     									break;
     									
@@ -207,7 +211,7 @@ public class RunGUI {
     									}
     									for(i = Ans.length(); i < 16; i++)
     										Ans = "0" + Ans;									
-    									cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
+    									cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans.toUpperCase());
     									cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
     									break;
     									
@@ -237,7 +241,7 @@ public class RunGUI {
     					            	Ans = Integer.toHexString(ins.get(i).getPC());
     					            	for(i = Ans.length(); i < 16; i++)
     					            		Ans = "0" + Ans;
-    					            	cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
+    					            	cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans.toUpperCase());
     									if(A == B){
     										cycles.get(cycles.size() - 1).setEXMEM_Cond(true);
     									}else
@@ -249,9 +253,13 @@ public class RunGUI {
     	        		case "DADDUI":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
     									B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_Imm());
     									Ans = Integer.toHexString(A + B);
-    									for(i = Ans.length(); i < 16; i++)
-    					            		Ans = "0" + Ans;
-    									cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
+    									if(Ans.charAt(0) >= '0' && Ans.charAt(0) <= '7' || ins.get(cycles.get(cycles.size() - 2).getIDEX_index()).getIns() != "DADDUI")
+    										for(i = Ans.length(); i < 16; i++)
+    											Ans = "0" + Ans;
+    									else
+    										for(i = Ans.length(); i < 16; i++)
+    											Ans = "F" + Ans;
+    									cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans.toUpperCase());
     									cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
     									break;
     								
@@ -262,7 +270,7 @@ public class RunGUI {
     				            	Ans = Integer.toHexString(ins.get(i).getPC());
     				            	for(i = Ans.length(); i < 16; i++)
     				            		Ans = "0" + Ans;
-    				            	cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans);
+    				            	cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans.toUpperCase());
     				            	cycles.get(cycles.size() - 1).setEXMEM_Cond(true);
     	        					break;
     	        	}
@@ -272,18 +280,18 @@ public class RunGUI {
             	if(cycles.size() - 1 > 0 && cycles.get(cycles.size() - 2 - nstall).getIFID_index() != -1){
                 	String r = Integer.toString(Integer.parseInt(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getBinA(), 2));
                 	r = "R" + r;
-                	for(i = 1; i < reg.size(); i++)
-                		if(r.equals("R0") || (r.equals(reg.get(i).getReg()) && reg.get(i).getStatus() == true))
+                	for(i = 0; i < reg.size(); i++)
+                		if(r.equals(reg.get(i).getReg()))
                 			break;
-                	if(i == reg.size())
+                	if(reg.get(i).getStatus() == false)
                 		readyA = false;
                 	
                 	r = Integer.toString(Integer.parseInt(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getBinB(), 2));
                 	r = "R" + r;
-                	for(j = 1; j < reg.size(); j++)
-                		if(r.equals("R0") || (r.equals(reg.get(j).getReg()) && reg.get(j).getStatus() == true))
+                	for(j = 0; j < reg.size(); j++)
+                		if(r.equals(reg.get(j).getReg()))
                 			break;
-                	if(j == reg.size())
+                	if(reg.get(j).getStatus() == false)
                 		readyB = false;
                 	
                 	switch(ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getIns()){
@@ -303,7 +311,6 @@ public class RunGUI {
     										reg.get(i).setStatus(true);
     								}
     								if(readyA && readyB){
-    									ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).setID(clockCycle);
     				            		cycles.get(cycles.size() - 1).setIDEX_index(cycles.get(cycles.size() - 2 - nstall).getIFID_index());
     				                	cycles.get(cycles.size() - 1).setIDEX_IR(cycles.get(cycles.size() - 2 - nstall).getIFID_IR());
     				                	cycles.get(cycles.size() - 1).setIDEX_NPC(cycles.get(cycles.size() - 2 - nstall).getIFID_NPC());
@@ -323,15 +330,9 @@ public class RunGUI {
     								}break;
     								
     					case "LD":
-    					case "DADDUI":	r = ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).getRt();
-    									for(i = 0; i < reg.size(); i++)
-    										if(r.equals(reg.get(i).getReg()))
-    											break;
-    									reg.get(i).setStatus(false);
-    									if(r.equals(reg.get(0).getReg()))
-    										reg.get(i).setStatus(true);
+    					case "DADDUI":	reg.get(j).setStatus(false);
+    									reg.get(0).setStatus(true);
     									if(readyA){
-    										ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).setID(clockCycle);
     					            		cycles.get(cycles.size() - 1).setIDEX_index(cycles.get(cycles.size() - 2 - nstall).getIFID_index());
     					                	cycles.get(cycles.size() - 1).setIDEX_IR(cycles.get(cycles.size() - 2 - nstall).getIFID_IR());
     					                	cycles.get(cycles.size() - 1).setIDEX_NPC(cycles.get(cycles.size() - 2 - nstall).getIFID_NPC());
@@ -352,8 +353,7 @@ public class RunGUI {
     										nstall++;
     									}break;
     									
-    					case "BC":		ins.get(cycles.get(cycles.size() - 2 - nstall).getIFID_index()).setID(clockCycle);
-    				            		cycles.get(cycles.size() - 1).setIDEX_index(cycles.get(cycles.size() - 2 - nstall).getIFID_index());
+    					case "BC":		cycles.get(cycles.size() - 1).setIDEX_index(cycles.get(cycles.size() - 2 - nstall).getIFID_index());
     				                	cycles.get(cycles.size() - 1).setIDEX_IR(cycles.get(cycles.size() - 2 - nstall).getIFID_IR());
     				                	cycles.get(cycles.size() - 1).setIDEX_NPC(cycles.get(cycles.size() - 2 - nstall).getIFID_NPC());
     				                	cycles.get(cycles.size() - 1).setIDEX_A(reg.get(i).getRegValue());
@@ -381,12 +381,14 @@ public class RunGUI {
             		if(PC == ins.get(i).getPC())
             			break;
         		if(i != ins.size()){
-        			ins.get(i).setIF(clockCycle);
                 	cycles.get(cycles.size() - 1).setIFID_index(i);
                 	cycles.get(cycles.size() - 1).setIFID_IR(ins.get(i).toHex());
+                	System.out.println("cond = " + cycles.get(cycles.size() - 2).getEXMEM_Cond());
+                	System.out.println("ins = " + ins.get(cycles.get(cycles.size() - 2).getEXMEM_index()).getIns());
                 	if(cycles.size() - 1 > 2 && cycles.get(cycles.size() - 2).getEXMEM_Cond() == true && (ins.get(cycles.get(cycles.size() - 2).getEXMEM_index()).getIns() == "BEQC" || ins.get(cycles.get(cycles.size() - 2).getEXMEM_index()).getIns() == "BC")){
                 		cycles.get(cycles.size() - 1).setIFID_NPC(cycles.get(cycles.size() - 2).getEXMEM_ALU());
                     	PC = hexToDecimal(cycles.get(cycles.size() - 2).getEXMEM_ALU());
+                    	System.out.println(PC);
                 	}else{
                 		PC += 4;
                 		String npc = Integer.toHexString(PC);
@@ -400,7 +402,7 @@ public class RunGUI {
         	
         	//WB
         	if(cycles.size() - 1 > 3 && cycles.get(cycles.size() - 2).getMEMWB_index() != -1){
-        		ins.get(cycles.get(cycles.size() - 2).getMEMWB_index()).setWB(clockCycle);
+        		cycles.get(cycles.size() - 1).setWB_index(cycles.get(cycles.size() - 2).getMEMWB_index());
         		String r = "";
         		switch(ins.get(cycles.get(cycles.size() - 2).getMEMWB_index()).getIns()){
 	        		case "LD":	r = ins.get(cycles.get(cycles.size() - 2).getMEMWB_index()).getRt();
@@ -408,7 +410,8 @@ public class RunGUI {
 	        						if(r.equals(reg.get(i).getReg()))
 	        							break;
 	        					reg.get(i).setStatus(true);
-	        					reg.get(i).setRegValue(cycles.get(cycles.size() - 2).getMEMWB_LMD());
+	        					if(!r.equalsIgnoreCase(reg.get(0).getRegValue()))
+	        						reg.get(i).setRegValue(cycles.get(cycles.size() - 2).getMEMWB_LMD());
 	        					cycles.get(cycles.size() - 1).setRn(r + " = " + reg.get(i).getRegValue());
 	        					break;
 	        					
@@ -421,7 +424,8 @@ public class RunGUI {
 										if(r.equals(reg.get(i).getReg()))
 											break;
 									reg.get(i).setStatus(true);
-									reg.get(i).setRegValue(cycles.get(cycles.size() - 2).getMEMWB_ALU());
+									if(!r.equalsIgnoreCase(reg.get(0).getReg()))
+										reg.get(i).setRegValue(cycles.get(cycles.size() - 2).getMEMWB_ALU());
 									cycles.get(cycles.size() - 1).setRn(r + " = " + reg.get(i).getRegValue());
 									break;
 									
@@ -430,7 +434,8 @@ public class RunGUI {
 										if(r.equals(reg.get(i).getReg()))
 											break;
 									reg.get(i).setStatus(true);
-									reg.get(i).setRegValue(cycles.get(cycles.size() - 2).getMEMWB_ALU());
+									if(!r.equalsIgnoreCase(reg.get(0).getReg()))
+										reg.get(i).setRegValue(cycles.get(cycles.size() - 2).getMEMWB_ALU());
 									cycles.get(cycles.size() - 1).setRn(r + " = " + reg.get(i).getRegValue());
 									break;
 	        		case "SD":
@@ -466,7 +471,13 @@ public class RunGUI {
 	    model.addRow(new Object[]{"ID/EX.NPC", cycles.get(cycle - 1).getIDEX_NPC()});
 	    model.addRow(new Object[]{"EX", " "});
 	    model.addRow(new Object[]{"EX/MEM.ALUOutput", cycles.get(cycle - 1).getEXMEM_ALU()});
-	    model.addRow(new Object[]{"EX/MEM.COND", cycles.get(cycle - 1).getEXMEM_Cond()});
+	    if(cycle > 2)
+	    	if(cycles.get(cycle - 1).getEXMEM_Cond() == true)
+		    	model.addRow(new Object[]{"EX/MEM.COND", "1"});
+	    	else
+	    		model.addRow(new Object[]{"EX/MEM.COND", "0"});
+	    else
+	    	model.addRow(new Object[]{"EX/MEM.COND", " "});
 	    model.addRow(new Object[]{"EX/MEM.IR", cycles.get(cycle - 1).getEXMEM_IR()});
 	    model.addRow(new Object[]{"EX/MEM.B", cycles.get(cycle - 1).getEXMEM_B()});
 	    model.addRow(new Object[]{"MEM", " "});
@@ -490,15 +501,15 @@ public class RunGUI {
 	    for(int i = 0; i < cycle; i++){
 	    	ArrayList<String> data = new ArrayList<String>();
 	    	for(int j = 0; j < ins.size(); j++){
-		    	if(ins.get(j).getIF() == i + 1)
+		    	if(cycles.get(i).getIFID_index() == j)
 		    		data.add("IF");
-		    	else if(ins.get(j).getID() == i + 1)
+		    	else if(cycles.get(i).getIDEX_index() == j)
 		    		data.add("ID");
-		    	else if(ins.get(j).getEX() == i + 1)
+		    	else if(cycles.get(i).getEXMEM_index() == j)
 		    		data.add("EX");
-		    	else if(ins.get(j).getMEM() == i + 1)
+		    	else if(cycles.get(i).getMEMWB_index() == j)
 		    		data.add("MEM");
-		    	else if(ins.get(j).getWB() == i + 1)
+		    	else if(cycles.get(i).getWB_index() == j)
 		    		data.add("WB");
 		    	else
 		    		data.add(" ");
@@ -533,7 +544,13 @@ public class RunGUI {
 	        	    model.addRow(new Object[]{"ID/EX.NPC", cycles.get(cycle - 1).getIDEX_NPC()});
 	        	    model.addRow(new Object[]{"EX", " "});
 	        	    model.addRow(new Object[]{"EX/MEM.ALUOutput", cycles.get(cycle - 1).getEXMEM_ALU()});
-	        	    model.addRow(new Object[]{"EX/MEM.COND", cycles.get(cycle - 1).getEXMEM_Cond()});
+	        	    if(cycle > 2)
+	        	    	if(cycles.get(cycle - 1).getEXMEM_Cond() == true)
+	        		    	model.addRow(new Object[]{"EX/MEM.COND", "1"});
+	        	    	else
+	        	    		model.addRow(new Object[]{"EX/MEM.COND", "0"});
+	        	    else
+	        	    	model.addRow(new Object[]{"EX/MEM.COND", " "});
 	        	    model.addRow(new Object[]{"EX/MEM.IR", cycles.get(cycle - 1).getEXMEM_IR()});
 	        	    model.addRow(new Object[]{"EX/MEM.B", cycles.get(cycle - 1).getEXMEM_B()});
 	        	    model.addRow(new Object[]{"MEM", " "});
@@ -550,15 +567,15 @@ public class RunGUI {
 	        	    for(int i = 0; i < cycle; i++){
 	        	    	ArrayList<String> data = new ArrayList<String>();
 	        	    	for(int j = 0; j < ins.size(); j++){
-	        		    	if(ins.get(j).getIF() == i + 1)
+	        	    		if(cycles.get(i).getIFID_index() == j)
 	        		    		data.add("IF");
-	        		    	else if(ins.get(j).getID() == i + 1)
+	        		    	else if(cycles.get(i).getIDEX_index() == j)
 	        		    		data.add("ID");
-	        		    	else if(ins.get(j).getEX() == i + 1)
+	        		    	else if(cycles.get(i).getEXMEM_index() == j)
 	        		    		data.add("EX");
-	        		    	else if(ins.get(j).getMEM() == i + 1)
+	        		    	else if(cycles.get(i).getMEMWB_index() == j)
 	        		    		data.add("MEM");
-	        		    	else if(ins.get(j).getWB() == i + 1)
+	        		    	else if(cycles.get(i).getWB_index() == j)
 	        		    		data.add("WB");
 	        		    	else
 	        		    		data.add(" ");
@@ -595,7 +612,13 @@ public class RunGUI {
 	        	    model.addRow(new Object[]{"ID/EX.NPC", cycles.get(cycle - 1).getIDEX_NPC()});
 	        	    model.addRow(new Object[]{"EX", " "});
 	        	    model.addRow(new Object[]{"EX/MEM.ALUOutput", cycles.get(cycle - 1).getEXMEM_ALU()});
-	        	    model.addRow(new Object[]{"EX/MEM.COND", cycles.get(cycle - 1).getEXMEM_Cond()});
+	        	    if(cycle > 2)
+	        	    	if(cycles.get(cycle - 1).getEXMEM_Cond() == true)
+	        		    	model.addRow(new Object[]{"EX/MEM.COND", "1"});
+	        	    	else
+	        	    		model.addRow(new Object[]{"EX/MEM.COND", "0"});
+	        	    else
+	        	    	model.addRow(new Object[]{"EX/MEM.COND", " "});
 	        	    model.addRow(new Object[]{"EX/MEM.IR", cycles.get(cycle - 1).getEXMEM_IR()});
 	        	    model.addRow(new Object[]{"EX/MEM.B", cycles.get(cycle - 1).getEXMEM_B()});
 	        	    model.addRow(new Object[]{"MEM", " "});
@@ -612,15 +635,15 @@ public class RunGUI {
 	        	    for(int i = 0; i < cycle; i++){
 	        	    	ArrayList<String> data = new ArrayList<String>();
 	        	    	for(int j = 0; j < ins.size(); j++){
-	        		    	if(ins.get(j).getIF() == i + 1)
+	        	    		if(cycles.get(i).getIFID_index() == j)
 	        		    		data.add("IF");
-	        		    	else if(ins.get(j).getID() == i + 1)
+	        		    	else if(cycles.get(i).getIDEX_index() == j)
 	        		    		data.add("ID");
-	        		    	else if(ins.get(j).getEX() == i + 1)
+	        		    	else if(cycles.get(i).getEXMEM_index() == j)
 	        		    		data.add("EX");
-	        		    	else if(ins.get(j).getMEM() == i + 1)
+	        		    	else if(cycles.get(i).getMEMWB_index() == j)
 	        		    		data.add("MEM");
-	        		    	else if(ins.get(j).getWB() == i + 1)
+	        		    	else if(cycles.get(i).getWB_index() == j)
 	        		    		data.add("WB");
 	        		    	else
 	        		    		data.add(" ");
@@ -652,7 +675,13 @@ public class RunGUI {
             	    model.addRow(new Object[]{"ID/EX.NPC", cycles.get(cycle - 1).getIDEX_NPC()});
             	    model.addRow(new Object[]{"EX", " "});
             	    model.addRow(new Object[]{"EX/MEM.ALUOutput", cycles.get(cycle - 1).getEXMEM_ALU()});
-            	    model.addRow(new Object[]{"EX/MEM.COND", cycles.get(cycle - 1).getEXMEM_Cond()});
+            	    if(cycle > 2)
+            	    	if(cycles.get(cycle - 1).getEXMEM_Cond() == true)
+            		    	model.addRow(new Object[]{"EX/MEM.COND", "1"});
+            	    	else
+            	    		model.addRow(new Object[]{"EX/MEM.COND", "0"});
+            	    else
+	        	    	model.addRow(new Object[]{"EX/MEM.COND", " "});
             	    model.addRow(new Object[]{"EX/MEM.IR", cycles.get(cycle - 1).getEXMEM_IR()});
             	    model.addRow(new Object[]{"EX/MEM.B", cycles.get(cycle - 1).getEXMEM_B()});
             	    model.addRow(new Object[]{"MEM", " "});
@@ -668,18 +697,18 @@ public class RunGUI {
             	}
             	
             	model2.setColumnCount(1);
-        	    for(int i = 0; i < cycle; i++){
+        	    for(int i = 0; i < cycles.size(); i++){
         	    	ArrayList<String> data = new ArrayList<String>();
         	    	for(int j = 0; j < ins.size(); j++){
-        		    	if(ins.get(j).getIF() == i + 1)
+        	    		if(cycles.get(i).getIFID_index() == j)
         		    		data.add("IF");
-        		    	else if(ins.get(j).getID() == i + 1)
+        		    	else if(cycles.get(i).getIDEX_index() == j)
         		    		data.add("ID");
-        		    	else if(ins.get(j).getEX() == i + 1)
+        		    	else if(cycles.get(i).getEXMEM_index() == j)
         		    		data.add("EX");
-        		    	else if(ins.get(j).getMEM() == i + 1)
+        		    	else if(cycles.get(i).getMEMWB_index() == j)
         		    		data.add("MEM");
-        		    	else if(ins.get(j).getWB() == i + 1)
+        		    	else if(cycles.get(i).getWB_index() == j)
         		    		data.add("WB");
         		    	else
         		    		data.add(" ");
