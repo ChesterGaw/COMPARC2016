@@ -3,6 +3,7 @@ package gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -135,6 +136,8 @@ public class RunGUI {
     								if(add >= 16384){
     									add %= 8192;
     									add += 8192;
+    								}else if(add < 8192){
+    									add = 16384 - (8192 - add);
     								}
     								r = Integer.toHexString(add).toUpperCase();
     								String data = cycles.get(cycles.size() - 2).getEXMEM_B();
@@ -166,48 +169,40 @@ public class RunGUI {
             	
             	//EX
             	if(cycles.size() - 1 > 1 && cycles.get(cycles.size() - 2).getIDEX_index() != -1){
-            		int A = 0;
-            		int B = 0;
+            		long A = 0;
+            		long B = 0;
+            		BigInteger AA;
+            		BigInteger BB;
             		String Ans = "";
             		cycles.get(cycles.size() - 1).setEXMEM_index(cycles.get(cycles.size() - 2).getIDEX_index());
                 	cycles.get(cycles.size() - 1).setEXMEM_IR(cycles.get(cycles.size() - 2).getIDEX_IR());
                 	cycles.get(cycles.size() - 1).setEXMEM_B(cycles.get(cycles.size() - 2).getIDEX_B());
                 	switch(ins.get(cycles.get(cycles.size() - 2).getIDEX_index()).getIns()){
-    	        		case "DADDU":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
-    	        						B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
-    	        						Ans = Integer.toHexString(A + B);
-    	        						if(Ans.length() > 16){
-    	        							Ans = Ans.substring(Ans.length() - 16);
-    	        						}else{
-    	        							for(i = Ans.length(); i < 16; i++)
+    	        		case "DADDU":	AA = new BigInteger(cycles.get(cycles.size() - 2).getIDEX_A() ,16);
+										BB = new BigInteger(cycles.get(cycles.size() - 2).getIDEX_B() ,16);
+    	        						Ans = Long.toHexString(AA.add(BB).longValue());
+    	        						for(i = Ans.length(); i < 16; i++)
     	        								Ans = "0" + Ans;
-    	        						}
     	        						cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans.toUpperCase());
     	        						cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
     	        						break;
     	        						
-    	        		case "DMULU":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
-    									B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
-    									Ans = Integer.toHexString(A * B);
-    									if(Ans.length() > 16){
-    										Ans = Ans.substring(Ans.length() - 16);
-    									}else{
-    										for(i = Ans.length(); i < 16; i++)
+    	        		case "DMULU":	A = Long.parseUnsignedLong(cycles.get(cycles.size() - 2).getIDEX_A(), 16);
+    									B = Long.parseUnsignedLong(cycles.get(cycles.size() - 2).getIDEX_B(), 16);
+    									Ans = Long.toHexString(A * B);
+    									for(i = Ans.length(); i < 16; i++)
     											Ans = "0" + Ans;
-    									}
     									cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans.toUpperCase());
     									cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
     									break;
     									
-    	        		case "DMUHU":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
-    									B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_B());
-    									Ans = Integer.toHexString(A * B);
-    									if(Ans.length() > 16){
-    										Ans = Ans.substring(0, Ans.length() - 16);
-    										for(i = Ans.length(); i < 16; i++)
-        										Ans = "0" + Ans;
-    									}else if(Ans.length() <= 16)
-    										Ans = "0000000000000000";		
+    	        		case "DMUHU":	AA = new BigInteger(cycles.get(cycles.size() - 2).getIDEX_A() ,16);
+										BB = new BigInteger(cycles.get(cycles.size() - 2).getIDEX_B() ,16);
+										BigInteger CC = new BigInteger("10000000000000000" ,16);
+    									A = AA.multiply(BB).divide(CC).longValue();
+    									Ans = Long.toHexString(A);
+    									for(i = Ans.length(); i < 16; i++)
+											Ans = "0" + Ans;		
     									cycles.get(cycles.size() - 1).setEXMEM_ALU(Ans.toUpperCase());
     									cycles.get(cycles.size() - 1).setEXMEM_Cond(false);
     									break;
@@ -249,7 +244,7 @@ public class RunGUI {
     	        		case "SD":	
     	        		case "DADDUI":	A = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_A());
     									B = hexToDecimal(cycles.get(cycles.size() - 2).getIDEX_Imm());
-    									Ans = Integer.toHexString(A + B);
+    									Ans = Long.toHexString(A + B);
     									if(Ans.charAt(0) >= '0' && Ans.charAt(0) <= '7' || ins.get(cycles.get(cycles.size() - 2).getIDEX_index()).getIns() != "DADDUI")
     										for(i = Ans.length(); i < 16; i++)
     											Ans = "0" + Ans;

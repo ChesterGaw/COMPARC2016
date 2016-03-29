@@ -453,17 +453,16 @@ public class CodeGUI{
 	            			for(j = 0; j < ins.size(); j++){
 	            				if(temp.equalsIgnoreCase(ins.get(j).getLabel())){
 	            					ins.get(i).setBinImm(signExtend(((ins.get(j).getPC() - ins.get(i).getPC()) / 4) - 1, 26));
-	            					j = ins.size() + 1;
-	            				}
-	            				if(ins.get(i).getOffset().concat(":").equals(ins.get(j).getLabel()))
 	            					counter++;
+	            					break;
+	            				}
 	            			}
 	            			iFoundLabel.add(counter);
 	        				counter = 0;
 	            		}
 	            	}
 	            	
-	            	for(i =0; i < iFoundLabel.size(); i++)
+	            	for(i = 0; i < iFoundLabel.size(); i++)
 	            		if(iFoundLabel.get(i) == 0){
 	            			JOptionPane.showMessageDialog(null, "Offset on some branches are not found!");
 	            			ins.clear();
